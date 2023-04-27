@@ -1,0 +1,1 @@
+INSERT INTO `users`( `username`, `password`, `full_names`, `mobile_phone`, `email_addr`, `roles`, `department`, `status`,`created_by`, `grade`, `team`) VALUES ('admin', 'f976af5c114279d52fb47841ed44b206','crm admin','0715745434','clinton.misango@kra.go.ke','admin','ict','Active','admin','7','ict')

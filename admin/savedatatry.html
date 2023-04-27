@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Dynamic Table</title>
+    <link rel="stylesheet" type="text/css" href="assets/css/bootstrap.min.css">
+</head>
+<body>
+     <div class="container">
+<h1>Student Data</h1>
+
+<form method="POST" name="sample">
+<br>
+    Roll No. <input type="number" name="rollno"> 
+    Name: <input type="text" name="name">
+    Girls: <input type="text" name="Girls">
+    <br><br>
+    <input type="button" name="add" value="Add Data" onclick="addStudent();" class="btn btn-success"><hr>
+
+            <table id="tbl" class="table" >
+                
+                
+                 <tbody>
+                     
+                 </tbody>
+             </table>
+
+</form>
+
+ <script type="text/javascript">
+       
+    function addStudent()
+    { 
+        var rollno=document.sample.rollno.value; 
+        var name=document.sample.name.value; 
+        var name=document.sample.Girls.value;
+        
+        var tr = document.createElement('tr');
+        
+        var td1 = tr.appendChild(document.createElement('td'));
+        var td2 = tr.appendChild(document.createElement('td'));
+        var td3 = tr.appendChild(document.createElement('td'));
+        var td4 = tr.appendChild(document.createElement('td'));
+        var td5 = tr.appendChild(document.createElement('td'));
+        var td6 = tr.appendChild(document.createElement('td'));
+ 
+        td3.innerHTML='<input class="btn btn-danger">'
+        td4.innerHTML='<input class="btn btn-primary">'
+        td5.innerHTML='<input class="btn btn-primary">'
+
+        document.getElementById("tbl").appendChild(tr);
+    }
+
+    
+    </script>
+</div>
+    </body>
+</html>

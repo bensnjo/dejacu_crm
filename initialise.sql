@@ -1,0 +1,1 @@
+INSERT INTO `mailtable` (`id`, `msgno`, `m_date`, `subject`, `toAdress`, `s_name`, `fromAdress`, `udate`, `massage`, `attachmentID`, `host`) VALUES (NULL, '4752', '29-06-2022', 'start of mail reading', 'cmurilla@gmail.com', 'clinton murilla', 'cmurilla@gmail.com', '29-06-2022', 'this is the systems firs ticket', '1222', '@kra.go.ke');
