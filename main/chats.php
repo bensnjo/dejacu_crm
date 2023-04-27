@@ -79,7 +79,7 @@ if(isset($_POST['send'])){
                         </div>
                       <div class="form-group"> 
                          <h2 style="color:#464646; font-family:'Times New Roman', Times, serif "> 
-                            Welcome to KESRA Care
+                            Welcome to Dejavu Care
                           </h2>
                           <h4 style="color:#464646;  font-family:'Times New Roman', Times, serif"> 
                             Chat with a member of our support team.
@@ -113,7 +113,7 @@ if(isset($_POST['send'])){
                         </div>
                       <div class="form-group"> 
                          <h2 style="color:#464646; font-family:'Times New Roman', Times, serif "> 
-                            Welcome to KESRA Care
+                            Welcome to Dejavy Care
                           </h2>
                           <h4 style="color:#464646;  font-family:'Times New Roman', Times, serif"> 
                             Chat with a member of our support team.

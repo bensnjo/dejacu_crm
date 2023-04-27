@@ -1,7 +1,6 @@
 <?php
 require_once($_SERVER['DOCUMENT_ROOT'] . "/crm/connection.php");
-require_once($_SERVER['DOCUMENT_ROOT'] . "/crm/main/sendsms.php");
-require_once($_SERVER['DOCUMENT_ROOT'] . "/crm/main/sendmail.php");
+require_once($_SERVER['DOCUMENT_ROOT'] . "/crm/member.php");
 require_once($_SERVER['DOCUMENT_ROOT'] . "/crm/access.php");
 session_start();
 
@@ -10,23 +9,27 @@ $groups = getgroups();
 $success = null;
 $db = getConnection();
 
-if (isset($_POST['sendemail'])) {
-
-  $to = mysqli_real_escape_string($db, $_POST['email']);
-  $subject = mysqli_real_escape_string($db, $_POST['subject']);
-  $message = mysqli_real_escape_string($db, $_POST['emailMessage']);
-  send_mail_by_PHPMailer($to, $subject, $message);
-  $succcess = "email sent succcessfully";
-
-  if (isset($_SESSION['addition']) && $_SESSION['addition'] == "email sent succcessfully ") {
-    $succcess = "Email sent succcessfully";
-    unset($_SESSION['addition']);
-  }
+if(isset($_REQUEST['id'])){
+  $db =  getConnection();   
+  $status='';
+   $id = $_REQUEST['id'];   
+  $query1 = "SELECT * FROM `groups` WHERE `id`=$id";
+  $groupquery = mysqli_query($db,$query1);
+  $row = mysqli_fetch_assoc($groupquery);
+  
+  $groupname = $row['name'];
+  $groupreference=$row['reference'];
 }
+if (isset($_POST['email_group'])){
+  emailgroup($id);
+  $succcess = "Emails sent Successfully";
 
-
+if(isset($_SESSION['addition']) && $_SESSION['addition'] == "Emails sent Successfully"){
+$succcess = "Emails sent Successfully";
+unset($_SESSION['addition']);
+}
+}
 ?>
-
 
 <!DOCTYPE html>
 <html lang="en">
@@ -38,14 +41,18 @@ if (isset($_POST['sendemail'])) {
   <meta name="description" content="">
   <meta name="author" content="">
   <link href="img/devajuLogo.jpeg" rel="icon">
-  <title>Dejavu Send email</title>
+  <title>Dejavu SMS Group</title>
   <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
   <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css">
   <link href="css/ruang-admin.min.css" rel="stylesheet">
   <link href="vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet">
+  <link href="css/atocss.css" rel="stylesheet">
 </head>
 
 <body id="page-top">
+<div id="loading">
+  <img id="loading-image" src="img/loader.gif" alt="Loading..." />
+</div>
   <div id="wrapper">
     <!-- Sidebar -->
     <?php
@@ -62,11 +69,12 @@ if (isset($_POST['sendemail'])) {
         <!-- Container Fluid-->
         <div class="container-fluid" id="container-wrapper">
           <div class="d-sm-flex align-items-center justify-content-between mb-4">
-            <h1 class="h3 mb-0 text-gray-800">Messaging</h1>
+            <h1 class="h3 mb-0 text-gray-800">Email Group</h1>
             <ol class="breadcrumb">
               <li class="breadcrumb-item"><a href="./">Home</a></li>
               <li class="breadcrumb-item">Messaging</li>
-              <li class="breadcrumb-item active" aria-current="page">send emails</li>
+              <li class="breadcrumb-item"><a href="emailrh.php">Groups</a></li>
+              <li class="breadcrumb-item active" aria-current="page">Send Emails</li>
             </ol>
           </div>
 
@@ -82,9 +90,7 @@ if (isset($_POST['sendemail'])) {
                     ' . $errors[0] . '
                   </div>
                     ';
-          }
-
-
+                   }
           if (isset($succcess)) {
             echo  '<div class="alert alert-success alert-dismissible fade show ml-4 mr-4" des$designation="alert">
             ' . $succcess . '
@@ -92,105 +98,58 @@ if (isset($_POST['sendemail'])) {
               <span aria-hidden="true">&times;</span>
             </button>
           </div>';
-
-
-            echo '<script>
+           echo '<script>
           setTimeout(()=>{
             window.open("/crm/main/emailrh.php", "_self");
-          }, 2000)
-         
+          }, 1000)
          </script>';
           }
-
-
           ?>
-
-          
-          <!-- GROUP EMAIL STARTS HERE -->
-          <span class="h3 mb-0 text-gray-800">Email Groups</span>
           <div class="card col-xl-12 col-md-12 mb-4 p-5">
-
+          
             <!-- Datatables -->
             <div class="col-lg-12">
               <div class="card mb-4">
                 <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                  <h6 class="m-0 font-weight-bold text-primary">Email Groups</h6>
+                  <h4 class="m-0 font-weight-bold text-primary">Group: <?php echo $groupname;?></h6>
+                  <div>
+                </div>
                 </div>
                 <div class="table-responsive p-3">
-                  <table class="table align-items-center table-flush" id="dataTable">
-                    <thead class="">
-                      <tr>
-                        <th>No</th>
-                        <th>Group Name</th>
-                        <th>Members</th>
-                        <th>View</th>
-                        <th>Email</th>
-                        <th>Del</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <?php
-                      $no = 0;
-                      function groupcount($groupid)
-                      {
-                        $db = getConnection();
-                        $query = "SELECT COUNT(*) as count FROM  `group_join` WHERE `group_id`='$groupid'";
-                        $result = mysqli_query($db, $query);
-                        $no = mysqli_fetch_assoc($result)['count'];
-                        return $no;
-                      }
-                      foreach ($groups as $row) {
-                        $groupid = $row['id'];
-                        ++$no;
-                      ?>
-                        <tr>
-                          <td><?php echo  $no; ?></td>
-                          <td><?php echo  $row['name']; ?></td>
-                          <td><?php echo  groupcount($groupid); ?></td>
-                          <td><a href="/crm/main/viewgroup.php?id=<?php echo $row['id']; ?>"><i class="fa fa-eye "></i></a></td>
-                          <td><a href="/crm/main/emailgroup.php?id=<?php echo $row['id']; ?> "><i class="fa fa-paper-plane success"></i></a></td>
-                          <td><a href="/crm/main/delgroupe.php?id=<?php echo $row['id']; ?>"><i class="fa fa-trash danger"></i></a></td>
-                        </tr>
-                      <?php } ?>
-                    </tbody>
-                  </table>
+                <form action="" method="POST" id="addCustomerForm" onsubmit="return submitForm()">
+                <div class="row">
+              <div class="col-8">
+              <div class="form-group">
+                <label>Email Subject</label>
+                <input type="text" name="emailsubject"  placeholder="Type email subject..." class="form-control" required>
+              </div>
+              </div>
+              </div>
+            <div class="row">
+              <div class="col-8">
+              <div class="form-group">
+                <label>Email Message</label>
+                <textarea class="form-control" name="emailmsg" id="fnameInput" placeholder="Type your message here.." rows="4" required></textarea>
+              </div>
+              </div>
+              </div>
+              <div class="row">
+              <div class="col">
+              <div class="form-group" style="margin-top: 10px">
+                <button type="submit" class="btn btn-success btn-block" name="email_group">SEND EMAILS</button>
+              </div>
+              </div>
+              <div class="col">
+              </div>
+              <div class="col">
+              </div>
+              </div>
+            </form>
+                
                 </div>
               </div>
             </div>
           </div>
-
-          <!-- GROUP ENDS -->
-          <!-- Documentation Link -->
-          <div class="row">
-            <div class="col-lg-12">
-            <div class="d-sm-flex align-items-center justify-content-between mb-4">
-            <h2 class="h3 mb-0 text-gray-800">Send Emails</h2>
-          </div>
-          <div class="card col-xl-12 col-md-12 mb-4 p-5">
-            <form action="" method="POST" id="sendemailForm" onsubmit="return submitForm()">
-              <div class="form-group">
-                <label>Email Subject</label>
-                <input type="text" class="form-control" id="exampleInputEmail" placeholder=" subject" name="subject" required>
-              </div>
-              <div class="form-group">
-                <label>Massage</label>
-                <textarea class="form-control" id="exampleFormControlTextarea1" rows="3" name="emailMessage" required></textarea>
-              </div>
-              <div class="form-group">
-                <label>Email</label>
-                <input type="email" class="form-control" id="exampleInputEmail" aria-describedby="emailHelp" placeholder="email address" name="email" required>
-              </div>
-              <div class="form-group" style="margin-top: 10px">
-                <button type="submit" class="btn btn-primary btn-block" name="sendemail">Send email</button>
-              </div>
-
-              <hr>
-
-            </form>
-          </div>
-            </div>
-          </div>
-
           <!-- Modal Logout -->
           <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabelLogout" aria-hidden="true">
             <div class="modal-dialog" role="document">
@@ -211,11 +170,9 @@ if (isset($_POST['sendemail'])) {
               </div>
             </div>
           </div>
-
         </div>
         <!---Container Fluid-->
       </div>
-
       <!-- Footer -->
       <?php
       //include('footer.php');
@@ -234,12 +191,10 @@ if (isset($_POST['sendemail'])) {
       <!-- Footer -->
     </div>
   </div>
-
   <!-- Scroll to top -->
   <a class="scroll-to-top rounded" href="#page-top">
     <i class="fas fa-angle-up"></i>
   </a>
-
   <script src="vendor/jquery/jquery.min.js"></script>
   <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
   <script src="vendor/jquery-easing/jquery.easing.min.js"></script>
@@ -247,7 +202,6 @@ if (isset($_POST['sendemail'])) {
   <!-- Page level plugins -->
   <script src="vendor/datatables/jquery.dataTables.min.js"></script>
   <script src="vendor/datatables/dataTables.bootstrap4.min.js"></script>
-
   <!-- Page level custom scripts -->
   <script>
     $(document).ready(function() {
@@ -258,7 +212,6 @@ if (isset($_POST['sendemail'])) {
     function submitForm() {
       var id = document.getElementById("idInput").value;
       var pin = document.getElementById("pinInput").value;
-
       if (pin.length == 0 && id.length == 0) {
         //showError("ID or Pin is required");
         alert('ID or Pin is required');
@@ -266,10 +219,12 @@ if (isset($_POST['sendemail'])) {
       } else {
         document.getElementById("addCustomerForm").submit();
       }
-
     }
-  </script>
 
+    $(window).on('load', function () {
+    $('#loading').hide();
+  }) 
+  </script>
 </body>
 
 </html>

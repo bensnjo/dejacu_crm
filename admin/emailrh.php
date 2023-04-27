@@ -96,8 +96,8 @@ if (isset($_POST['sendemail'])) {
 
             echo '<script>
           setTimeout(()=>{
-            window.open("/crm/admin/emailrh.php", "_self");
-          }, 2000)
+            window.open("/crm/main/emailrh.php", "_self");
+          }, 1000)
          
          </script>';
           }
@@ -147,9 +147,9 @@ if (isset($_POST['sendemail'])) {
                           <td><?php echo  $no; ?></td>
                           <td><?php echo  $row['name']; ?></td>
                           <td><?php echo  groupcount($groupid); ?></td>
-                          <td><a href="/crm/admin/viewgroup.php?id=<?php echo $row['id']; ?>"><i class="fa fa-eye "></i></a></td>
-                          <td><a href="/crm/admin/emailgroup.php?id=<?php echo $row['id']; ?> "><i class="fa fa-paper-plane success"></i></a></td>
-                          <td><a href="/crm/admin/delgroupe.php?id=<?php echo $row['id']; ?>"><i class="fa fa-trash danger"></i></a></td>
+                          <td><a href="/crm/main/viewgroup.php?id=<?php echo $row['id']; ?>"><i class="fa fa-eye "></i></a></td>
+                          <td><a href="/crm/main/emailgroup.php?id=<?php echo $row['id']; ?> "><i class="fa fa-paper-plane success"></i></a></td>
+                          <td><a href="/crm/main/delgroupe.php?id=<?php echo $row['id']; ?>"><i class="fa fa-trash danger"></i></a></td>
                         </tr>
                       <?php } ?>
                     </tbody>

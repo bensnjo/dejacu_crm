@@ -1,13 +1,35 @@
 <?php
 require_once($_SERVER['DOCUMENT_ROOT']."/crm/connection.php");
-require_once($_SERVER['DOCUMENT_ROOT']."/crm/device.php");
+require_once($_SERVER['DOCUMENT_ROOT']."/crm/member.php");
 require_once($_SERVER['DOCUMENT_ROOT']."/crm/access.php");
 session_start();
-
 access();
 
-$devices = alldevices()
+$success = null;
+$db = getConnection();
 
+if(isset($_REQUEST['id'])){
+  $db =  getConnection();   
+  $status='';
+   $id = $_REQUEST['id'];   
+  $query1 = "SELECT * FROM `groups` WHERE `id`=$id";
+  $groupquery = mysqli_query($db,$query1);
+  $row = mysqli_fetch_assoc($groupquery);
+  
+  $groupname = $row['name'];
+  $groupid = $row['id'];
+  $groupreference=$row['reference'];
+}
+
+if (isset($_POST['add_group'])){
+    addgroup();
+    $succcess = "Group created succcessfully";
+
+if(isset($_SESSION['addition']) && $_SESSION['addition'] == "Group created succcessfully"){
+  $succcess = "Group created succcessfully";
+  unset($_SESSION['addition']);
+}
+}
 ?>
 
 
@@ -21,7 +43,7 @@ $devices = alldevices()
   <meta name="description" content="">
   <meta name="author" content="">
   <link href="img/devajuLogo.jpeg" rel="icon">
-  <title>Dejavu - Devices</title>
+  <title>Dejavu Add Group</title>
   <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
   <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css">
   <link href="css/ruang-admin.min.css" rel="stylesheet">
@@ -45,80 +67,85 @@ $devices = alldevices()
         <!-- Container Fluid-->
         <div class="container-fluid" id="container-wrapper">
           <div class="d-sm-flex align-items-center justify-content-between mb-4">
-            <h1 class="h3 mb-0 text-gray-800">DEVICE LIST</h1>
+            <h1 class="h3 mb-0 text-gray-800">Add Group</h1>
             <ol class="breadcrumb">
               <li class="breadcrumb-item"><a href="./">Home</a></li>
-              <li class="breadcrumb-item">Devices</li>
-              <li class="breadcrumb-item active" aria-current="page">Devices List</li>
+              <li class="breadcrumb-item">Messaging</li>
+              <li class="breadcrumb-item active" aria-current="page">Add Group</li>
             </ol>
           </div>
 
           <!-- PUT YOUR CODE HERE -->
+          <?php
+                   
+                   if(count($errors)> 0){
+                    echo '
+                    <div class="alert alert-danger alert-dismissible" role="alert">
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                    '.$errors[0].'
+                  </div>
+                    ';
+                }
 
-             <!-- Datatables -->
-             <div class="col-lg-12">
-              <div class="card mb-4">
-                <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                  <h6 class="m-0 font-weight-bold text-primary">FIND A DEVICE</h6>
-                </div>
-                <div class="table-responsive p-3">
-                  <table class="table align-items-center table-flush" id="dataTable">
-                    <thead class="">
-                      <tr>
-                        <th>Date</th>
-                        <th>Customer</th>
-                        <th>Serial No</th>
-                        <th>PIN</th>
-                        <th>Key</th>
-                        <th>Status</th>
-                        <th>CreatedBy</th>
-                        <th colspan="2">Operation</th>
-                        
-                        
-                      </tr>
-                    </thead>
-                    <tbody>
-                         <?php
 
-                            foreach($devices as $row){
-                                
-                                print " <tr> ";
-                                
-                                print "<td>" .substr($row['dateCreated'],0,-10). "</td>";
-                                print "<td>" . $row['customerName']. "</td>";
-                                print "<td>" . $row['serialNumber']. "</td>";
-                                print "<td>" . $row['pin']. "</td>";
-                                print "<td>" . $row['deviceKey']. "</td>";
-                                print "<td>" . $row['status']. "</td>";
-                                print "<td>" . $row['userID']. "</td>";
-                                print("<td>");
-                                print('<a " href="/crm/main/editDevice.php?id='.$row['id'].'"><i class="fa fa-edit"></i></a>');
-                                print("</td>");
-                                print("<td>");
-                                print('<a " href="/crm/main/viewDevice.php?id='.$row['id'].'"><i class="fa fa-eye"></i></a>');
-                                print("</td>");
-                                
-                            }
-                        ?>
+           if(isset($succcess)){
+            echo  '<div class="alert alert-success alert-dismissible fade show ml-4 mr-4" des$designation="alert">
+            '.$succcess.'
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>';
 
-                     
-                    </tbody>
-                  </table>
-                </div>
-              </div>
-            </div>
-          <!-- YOUR CODE ENDS HERE -->
+
+          echo'<script>
+          setTimeout(()=>{
+            window.open("/crm/main/smsrh.php", "_self");
+          }, 1000)
          
+         </script>';
+
+           } ?>
+          <div class="card col-xl-12 col-md-12 mb-4 p-5">
+          <div class="card col-xl-12 col-md-12 mb-4 p-5">
+          <div class="col-lg-12">
+              <div class="mb-4">
+                <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                  <h4 class="m-0 font-weight-bold text-primary">+ Add Group</h4>
+                  <hr>
+                  </div>
+                </div>
+                </div>
+                
+            <form action="" method="POST" id="addCustomerForm" onsubmit="return submitForm()">
+            <div class="row">
+              <div class="col">
+              <div class="form-group">
+                <label>GROUP NAME</label>
+                <input type="text" class="form-control" id="fnameInput" placeholder="Name" name="groupname" required>
+              </div>
+              </div>
+              </div>
+              <div class="row">
+              <div class="col">
+              <div class="form-group" style="margin-top: 10px">
+                <button type="submit" class="btn btn-primary btn-block" name="add_group">ADD GROUP</button>
+              </div>
+              </div>
+              <div class="col">
+              </div>
+              <div class="col">
+              </div>
+              </div>
+              </div>
+            </form>
           </div>
-          <!--Row-->
+          </div>
+
 
           <!-- Documentation Link -->
-          <div class="row">
-            <div class="col-lg-12">
-              
-            </div>
-          </div>
-
+          
           <!-- Modal Logout -->
           <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabelLogout"
             aria-hidden="true">
@@ -172,7 +199,11 @@ $devices = alldevices()
       $('#dataTable').DataTable(); // ID From dataTable 
       $('#dataTableHover').DataTable(); // ID From dataTable with Hover
     });
+
+    
   </script>
+
+
 
 </body>
 

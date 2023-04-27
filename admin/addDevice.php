@@ -120,7 +120,6 @@ if(isset($_SESSION['addition']) && $_SESSION['addition'] == "Device added Succes
           }, 2000)
          
          </script>';
-
            }   ?>
           <div class="card col-xl-12 col-md-12 mb-4 p-5">
         <div class="card col-xl-12 col-md-12 mb-4 p-5">

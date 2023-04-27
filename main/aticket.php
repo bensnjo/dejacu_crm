@@ -114,7 +114,7 @@ if(isset($_SESSION['iaddition'])){
                   
                  echo'<script>
                   setTimeout(()=>{
-                    window.open("/crm/admin/cticket.php", "_self");
+                    window.open("/crm/main/cticket.php", "_self");
                   }, 4000)
                  
                  </script>';

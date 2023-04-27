@@ -100,7 +100,7 @@ if(isset($_SESSION['addition']) && $_SESSION['addition'] == "Device added Succes
                     ';
                     echo'<script>
                     setTimeout(()=> {
-                      window.open("/crm/admin/addDevice.php", "_self");
+                      window.open("/crm/main/addDevice.php", "_self");
                     }, 1000)
                    
                    </script>';
@@ -116,7 +116,7 @@ if(isset($_SESSION['addition']) && $_SESSION['addition'] == "Device added Succes
           </div>';
           echo'<script>
           setTimeout(()=> {
-            window.open("/crm/admin/allDevices.php", "_self");
+            window.open("/crm/main/allDevices.php", "_self");
           }, 2000)
          
          </script>';

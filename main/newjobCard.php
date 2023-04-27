@@ -103,7 +103,7 @@ if(isset($_SESSION['iaddition'])){
                   
                  echo'<script>
                   setTimeout(()=>{
-                    window.open("/crm/admin/jobCards.php", "_self");
+                    window.open("/crm/main/jobCards.php", "_self");
                   }, 4000)
                  
                  </script>';
@@ -157,7 +157,7 @@ if(isset($_SESSION['iaddition'])){
                     <div class="col">
                     <div class="form-group">
                     <label>CHARGER</label>
-                    <input class="form-control" type="checkbox" name="charger" value="" id="flexCheckChecked" unchecked>
+                    <input class="form-control" type="checkbox" name="charger" value="" id="flexCheckChecked" checked>
                     </div>
                     </div>
                     
@@ -212,7 +212,7 @@ if(isset($_SESSION['iaddition'])){
                     <select name="technician" class="form-control" id="exampleInputPassword">
                       <option>Select</option>
                               <?php
-                                $query = "SELECT * FROM `users`";
+                                $query = "SELECT * FROM `users` WHERE `team`='Technical Support'";
                                 $result = mysqli_query($db,$query);
                                   foreach($result as $row)  {                                          
                                   echo "<option value='".$row['full_names']."'>".$row['full_names']."</option>";

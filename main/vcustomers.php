@@ -90,7 +90,7 @@ $customers = allcustomers()
                                 print "<td>" . $row['phoneNumber']. "</td>";
                                 print "<td>" . $row['county']. "</td>";
                                 print("<td>");
-                                print('<a  href="/crm/admin/edit.php?id='.$row['id'].'"><i class="fa fa-edit"></i></a>');
+                                print('<a  href="/crm/main/edit.php?id='.$row['id'].'"><i class="fa fa-edit"></i></a>');
                                 print("</td>");
                                 
                             }
