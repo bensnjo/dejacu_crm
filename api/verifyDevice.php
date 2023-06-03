@@ -5,12 +5,12 @@ header("Access-Control-Allow-Methods: POST");
 header("Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With");
 require_once($_SERVER['DOCUMENT_ROOT']."/crm/connection.php");
    
-if(!empty($_POST['pin']) && !empty($_POST['key'])) {
+if(!empty($_REQUEST['pin']) && !empty($_REQUEST['key'])) {
         // New Data Input
         $db=getConnection();
         
-         $cusromerPin= $_POST['pin'];
-         $DeviceKey= $_POST['key'];
+         $cusromerPin= $_REQUEST['pin'];
+         $DeviceKey= $_REQUEST['key'];
          $DeviceStatus="ACTIVE";
       $device_check_query = "SELECT * FROM devices WHERE deviceKey ='$DeviceKey' AND `pin` = '$cusromerPin' AND `status`='$DeviceStatus' LIMIT 1";
       $resultDevice = mysqli_query($db, $device_check_query);

@@ -16,6 +16,21 @@
       <div class="sidebar-heading">
         Features
       </div>
+      <li class="nav-item">
+        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#Collapseleads"
+          aria-expanded="true" aria-controls="collapseBootstrap">
+          <i class="fas fa-users fa-2x text-danger"></i>
+          <span>LEADS</span>
+        </a>
+        <div id="Collapseleads" class="collapse" aria-labelledby="headingBootstrap" data-parent="#accordionSidebar">
+          <div class="bg-white py-2 collapse-inner rounded">
+            <h6 class="collapse-header">LEADS</h6>
+            <a class="collapse-item" href="aleads.php">ADD LEAD</a>
+            <a class="collapse-item" href="vleads.php">LEADS LIST</a>
+            <a class="collapse-item" href="vleadsa.php">MY LEADS</a>
+          </div>
+        </div>
+      </li>
       <!--  -->
       <li class="nav-item">
         <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseBootstrap"

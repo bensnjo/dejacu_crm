@@ -104,8 +104,8 @@ if (isset($_POST['sendsms'])) {
                 <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
                   <h4 class="m-0 font-weight-bold text-primary"><?php echo $groupname; ?></h6>
                     <div>
-                      <a class="btn btn-primary" href="/crm/admin/newcontact.php?id=<?php echo $id; ?>" role="button">Add Contact</a>
-                      <a class="btn btn-primary" href="/crm/admin/uploadContact.php?id=<?php echo $id; ?>" role="button">Upload</a>
+                      <a class="btn btn-primary" href="/crm/main/newcontact.php?id=<?php echo $id; ?>" role="button">Add Contact</a>
+                      <a class="btn btn-primary" href="/crm/main/uploadContact.php?id=<?php echo $id; ?>" role="button">Upload</a>
                     </div>
                 </div>
                 <div class="table-responsive p-3">

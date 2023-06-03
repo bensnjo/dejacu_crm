@@ -109,46 +109,47 @@ function regcomplain()
 {
     $db = getConnection();
     $ticketNo = generateNo();
-
     $_SESSION['ticketNo'] = $ticketNo;
     $cusName = mysqli_real_escape_string($db, $_POST['cusName']);
     $mobileNumber = mysqli_real_escape_string($db, $_POST['mobileNumber']);
     $businessName = mysqli_real_escape_string($db, $_POST['businessName']);
     $serialNumber = mysqli_real_escape_string($db, $_POST['serialNumber']);
     $source = mysqli_real_escape_string($db, $_POST['source']);
+    $resolved = mysqli_real_escape_string($db, $_POST['resolved']);
     $dStatus = mysqli_real_escape_string($db, $_POST['dStatus']);
     $priority = mysqli_real_escape_string($db, $_POST['priority']);
     $complain = mysqli_real_escape_string($db, $_POST['complain']);
-    $status = "OPEN";
+    $msg = "Dear " . $cusName . ", a ticket with ticket No. " . $ticketNo . " has been created. We will inform your on the progres of the Ticket. Thank you";
+    if($resolved=="CLOSED"){
+        $status = "CLOSED";
+        $resolvedat=date("Y-m-d G:i");
+        $resolvedby=$_SESSION['username'];
+    }
+    else{
+        $status = "OPEN";
+        $resolvedat=null;
+        $resolvedby='';
+         sendSMSnew($mobileNumber, $msg);
+    }
+   
     $assignedto = mysqli_real_escape_string($db, $_POST['assigned']);
     $user = $_SESSION['username'];
-    $msg = "Dear " . $cusName . ", a ticket with ticket No. " . $ticketNo . " has been created. We will inform your on the progres of the Ticket. Thank you";
-
-
+   
     $ip = getip();
     $t = time();
     //echo "hey hey";
     $d = date("Y-m-d G:i", $t);
-
-    $query = "INSERT INTO `insidence`( `dateCreated`, `ticketNumber`,
-                                        `cusName`, `mobileNumber`, `businessName`, 
-                                        `serialNumber`, `source`, `dStatus`, 
-                                        `priority`, `complain`, `createdBy`,`status`,`AssignedTo`) 
-         VALUES (
-                                        '$d','$ticketNo','$cusName',
-                                        '$mobileNumber','$businessName','$serialNumber',
-                                        '$source', '$dStatus', '$priority', 
-                                        '$complain', '$user', '$status', '$assignedto')";
+    $query = "INSERT INTO `insidence`( `dateCreated`, `ticketNumber`, `cusName`, `mobileNumber`, `businessName`, `serialNumber`, `source`, `dStatus`, `priority`, `complain`, `createdBy`, `status`, `AssignedTo`, `resolvedAt`, `resolvedby`) 
+    VALUES ( '$d','$ticketNo','$cusName','$mobileNumber','$businessName','$serialNumber','$source', '$dStatus', '$priority','$complain', '$user', '$status', '$assignedto','$resolvedat','$resolvedby')";
     mysqli_query($db, $query);
     //send sms
-    sendSMSnew($mobileNumber, $msg);
+   
     //save sms
     $insertSms = "INSERT INTO `sms`( `customer`, `phoneNumber`, `message`, `type`) 
             VALUES ('$cusName','$mobileNumber','$msg','Ticket')";
     mysqli_query($db, $insertSms);
 
     $_SESSION['iaddition'] = "Ticket " . $ticketNo . " added Successful ";
-
     //
     $audit = "INSERT INTO audit_trail (username, time_stamp, `action`, results, impact, ip_address)
          VALUES('$user','$d', 'add_ticket', 'success', '$ticketNo', '$ip')";
@@ -171,35 +172,65 @@ function regjobcard()
     $modelseq = mysqli_real_escape_string($db, $_POST['modelseq']);
     $serialNumber = mysqli_real_escape_string($db, $_POST['serialNumber']);
     $fault = mysqli_real_escape_string($db, $_POST['fault']);
-    $workdone = mysqli_real_escape_string($db, $_POST['workdone']);
+    //$workdone = mysqli_real_escape_string($db, $_POST['workdone']);
     $technician = mysqli_real_escape_string($db, $_POST['technician']);
     $user = $_SESSION['username'];
     $status = 1;
     $msg = "Dear " . $cusName . ", a Job Card with number " . $jobcardNo . " has been created. We will keep you updated on the progres of the job card. Thank you";
     $ip = getip();
     $d = date("Y-m-d G:i");
-    $query = " INSERT INTO `jobcards`(`dateCreated`, `jbcrdNum`, `customer`, `phoneNumber`, `serialNumber`, `email`, `devicename`, `charger`, `qty`, `model`, `fault`, `work`, `techn`, `createdBy`, `status`)
-    VALUES ('$d','$jobcardNo','$cusName','$mobileNumber','$serialNumber','$email','$equipment','$charger','$qty','$modelseq','$fault','$workdone','$technician','$user','$status')";
+    $query = " INSERT INTO `jobcards`(`dateCreated`, `jbcrdNum`, `customer`, `phoneNumber`, `serialNumber`, `email`, `devicename`, `charger`, `qty`, `model`, `fault`, `techn`, `createdBy`, `status`)
+    VALUES ('$d','$jobcardNo','$cusName','$mobileNumber','$serialNumber','$email','$equipment','$charger','$qty','$modelseq','$fault','$technician','$user','$status')";
     if (mysqli_query($db, $query)) {
         //send sms
         sendSMSnew($mobileNumber, $msg);
         //save sms
         $insertSms = "INSERT INTO `sms`( `customer`, `phoneNumber`, `message`, `type`) 
             VALUES ('$cusName','$mobileNumber','$msg','JobCard')";
-        mysqli_query($db, $insertSms);
+        if(mysqli_query($db, $insertSms)){
         $_SESSION['iaddition'] = "Job Card " . $jobcardNo . " added Successful ";
-        //
+        //send sms to technician
+        $msgtech="Dejavu Note: Jobcard ". $jobcardNo ." created at ".$d." has been assigned to you. Kindly address.";
+        $techniciannum=mysqli_fetch_assoc(mysqli_query($db, "SELECT  `mobile_phone` FROM `users` where full_names='$technician'"));
+        $techn= $techniciannum['mobile_phone'];
+        if(sendSMSnew($techn, $msgtech)){
+        //save sms
+        $insertSms2 = "INSERT INTO `sms`( `customer`, `phoneNumber`, `message`, `type`) 
+        VALUES ('$user','$techn','$msgtech','JobCard')";
+        mysqli_query($db, $insertSms2);
+        }
+        }
         $audit = "INSERT INTO audit_trail (username, time_stamp, `action`, results, impact, ip_address)
          VALUES('$user','$d', 'add_ticket', 'success', '$jobcardNo', '$ip')";
         mysqli_query($db, $audit);
     }
 }
-
+function closejobcard($jobNumber,$cusnum)
+{
+    $db = getConnection();
+    $d = date("Y-m-d G:i");
+    $ip = getip();
+    $status=1;
+    $jobcardstatus = mysqli_real_escape_string($db, $_POST['closeJobcard']);
+    if( $jobcardstatus=="CLOSE"){
+        $status=0;
+        $msgtech="Job card ".$jobNumber." has been closed. Thank you";
+        $user = $_SESSION['username'];
+    $query = "UPDATE `jobcards` SET `status` ='$status',`closedBy`='$user' WHERE `jbcrdNum`='$jobNumber'";
+    $result = mysqli_query($db, $query);
+    sendSMSnew($cusnum, $msgtech);
+    }
+    $_SESSION['iaddition'] = "Jobcard".$jobNumber." closed succcessfully";
+    $audit = "INSERT INTO audit_trail (username, time_stamp, `action`, results, impact, ip_address)
+    VALUES('$user','$d', 'close jbc', 'success', '$jobNumber', '$ip')";
+    mysqli_query($db, $audit);
+    return $result;
+}
 // MEMBER NO GENERATION
 function generateNo()
 {
     $db = getConnection();
-    $query2 = "SELECT `ticketnumber` FROM `djv_nums`";
+    $query2 = "SELECT `ticketNumber` FROM `djv_nums`";
     $fetchNumber = mysqli_query($db, $query2);
     $keyAvailable = mysqli_fetch_assoc($fetchNumber);
     $no = $keyAvailable['ticketNumber'];
@@ -251,6 +282,17 @@ function getAgentjobcards($agent)
 
     return $result;
 }
+function getAlljobcards()
+{
+    $db = getConnection();
+    $queryjobcards = "SELECT * FROM `jobcards` ORDER BY id asc";
+    $result = mysqli_query($db, $queryjobcards);
+    if (mysqli_error($db)) {
+        echo mysqli_error($db);
+    }
+
+    return $result;
+}
 function getAgentTikets($agent, $resolved = false)
 {
     $db = getConnection();
@@ -293,6 +335,60 @@ function allcustomers()
     $query = "SELECT * FROM customers ";
     $result = mysqli_query($db, $query);
     return $result;
+}
+function registerlead(){
+$db = getConnection();
+    $ldName = mysqli_real_escape_string($db, $_POST['leadname']);
+    $businessname = mysqli_real_escape_string($db, $_POST['businessname']);
+    $phonenumber = mysqli_real_escape_string($db, $_POST['phonenumber']);
+    $location = mysqli_real_escape_string($db, $_POST['location']);
+    $email = mysqli_real_escape_string($db, $_POST['email']);
+    $industry = mysqli_real_escape_string($db, $_POST['industry']);
+    $county = mysqli_real_escape_string($db, $_POST['county']);
+
+    $user = $_SESSION['username']; $ip = getip();
+    $t = time();
+    $d = date("Y-m-d G:i");
+    $query = "INSERT INTO `djvuleads`( `customer`, `phoneNumber`, `email`,`business_name`, `location`, `industry`, `county`, `datecreated`, `created by`)
+     VALUES ('$ldName','$phonenumber','$email','$businessname', '$location','$industry','$county','$d','$user')";
+    mysqli_query($db, $query);
+    $_SESSION['iaddition'] = "Lead added Successful ";
+    $audit = "INSERT INTO audit_trail (username, time_stamp, `action`, results, impact, ip_address)
+         VALUES('$user','$d', 'add_lead', 'success', '$ldName', '$ip')";
+    mysqli_query($db, $audit);
+
+}
+function allleads(){
+    $db = getConnection();
+    $query = "SELECT * FROM djvuleads";
+    $result = mysqli_query($db, $query);
+    return $result;
+}
+function agentleads($agent){
+    $db = getConnection();
+    $query = "SELECT * FROM `djvuleads` WHERE `created by`='$agent'";
+    $result = mysqli_query($db, $query);
+    return $result;  
+}
+function updatelead($id){
+    $db = getConnection();
+    $cusName =  $_POST['leadname'];
+    $phoneNumber = $_POST['phonenumber'];
+    $businessName = $_POST['businessname'];
+    $email = $_POST['email'];
+    $location = $_POST['location'];
+    $industry = $_POST['industry'];
+    $county = $_POST['county'];
+    $user = $_SESSION['username'];
+    $query2 = "UPDATE `djvuleads` SET `customer`='$cusName',`phoneNumber`='$phoneNumber',`business_name`='$businessName',`email`='$email',`location`=' $location', `industry`=' $industry',`county`='$county' WHERE `id`='$id'";
+    mysqli_query($db, $query2);
+    $ip = getip();
+    $t = time();
+    $d = date("Y-m-d G:i:s", $t);
+    $audit = "INSERT INTO audit_trail (username, time_stamp, `action`, results, impact, ip_address)
+ VALUES('$user','$d', 'Lead_update', 'success', '$cusName', '$ip')";
+    mysqli_query($db, $audit);
+    $_SESSION['iaddition'] = "Lead updated Successfully ";
 }
 function addcontact($id)
 {
@@ -373,6 +469,7 @@ function groupcontact($id)
 function smsgroup($groupid)
 {
     $db = getConnection();
+    set_time_limit(5000);
     $d = date("Y-m-d G:i");
     $ip = getip();
     //fetch contact
@@ -398,6 +495,7 @@ function smsgroup($groupid)
 }
 function emailgroup($groupid)
 {
+    set_time_limit(5000);
     $db = getConnection();
     $d = date("Y-m-d G:i");
     $ip = getip();

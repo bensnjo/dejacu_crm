@@ -2,11 +2,11 @@
 <?php
 require_once($_SERVER['DOCUMENT_ROOT']."/crm/connection.php");
 require_once($_SERVER['DOCUMENT_ROOT']."/crm/access.php");
-require_once($_SERVER['DOCUMENT_ROOT'].'/crm/smail.php');
+require_once($_SERVER['DOCUMENT_ROOT'].'/crm/Smail.php');
 
 session_start();
 access();
-//admin();
+admin();
 $succcess = null;
 if (isset($_POST['register'])){
     register();
@@ -14,15 +14,7 @@ if (isset($_POST['register'])){
       $succcess = $_SESSION['registerSucc'];
       unset($_SESSION['registerSucc']);
       $newData = $_SESSION['registeredUser'];
-
-    #Newton -- Send email To added Use with details ##endregion
-    $mail = "Dear ".$newData['name'].", Account Created. Use the following credentials to log in:
-          \n Username: ".$newData['username']." \nPassword: ".$newData['password']."www.dejavu.co.ke/crm";
-    send_mail_by_PHPMailer($newData['email'], 'Account creation',$mail);
-
-    unset($_SESSION['registeredUser']);
-
-
+   
     }
 }
 

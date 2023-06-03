@@ -185,6 +185,7 @@ if (isset($_POST['upload_contact'])) {
                   <div class="col">
                     <div class="form-group" style="margin-top: 10px">
                       <button type="submit" class="btn btn-primary btn-block" name="upload_contact">UPLOAD FILE</button>
+                      <span style=" color: red;">Document format: Name, Number, Email</span>
                     </div>
                   </div>
                   <div class="col">

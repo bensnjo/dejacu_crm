@@ -25,21 +25,8 @@ if(isset($_POST['searchQ'])){
  }
 }
 if (isset($_POST['addTicket'])){
-  $cusName = mysqli_real_escape_string($db, $_POST['cusName']);
-  $mobileNumber = mysqli_real_escape_string($db, $_POST['mobileNumber']);
-  $db = getConnection();
- $query = "SELECT * FROM `customers` WHERE `cusName`='$cusName' AND `phoneNumber`='$mobileNumber'";
- $res = mysqli_query($db, $query);
- if(mysqli_fetch_assoc($res)){
+    
   regcomplain();
- }
- else{
-  $existingCust = null;
- }
-  
-  //
-    //admit($_SESSION['memberNo'],$_POST['temp']);
-
   unset($_SESSION['isExisting']);  unset($_POST['searchQ']);
 }
 if(isset($_SESSION['iaddition'])){
@@ -220,7 +207,7 @@ if(isset($_SESSION['iaddition'])){
                     </div>
                     
                     <div class="form-group">
-                      <button type="submit" class="btn btn-success btn-block" name="addTicket" >ADD TICKET</button>
+                      <button type="submit" class="btn btn-success btn-block" name="addticket" >ADD TICKET</button>
                     </div>
 
                     <hr> 

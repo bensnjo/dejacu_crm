@@ -33,11 +33,14 @@ if (isset($_REQUEST['jobcardNo'])){
     $stats= $result2['status'];
 // 
 }
-if (isset($_POST['close'])){
-  header("Location: mTiket.php");
-  exit();
+if (isset($_POST['closejobcd'])){
+  closejobcard($jobNumber,$mobileNumber);
 }
+if(isset($_SESSION['iaddition'])){
+  $succcess = $_SESSION['iaddition'];
 
+  unset($_SESSION['iaddition']);
+}
 ?>
 
 <!DOCTYPE html>
@@ -102,12 +105,10 @@ if (isset($_POST['close'])){
                     <span aria-hidden="true">&times;</span>
                   </button>
                 </div>';
-      
-                  
                  echo'<script>
                   setTimeout(()=>{
-                    window.open("/crm/admin/cticket.php", "_self");
-                  }, 1000)
+                    window.open("/crm/main/mainjobcards.php", "_self");
+                  }, 500)
                  
                  </script>';
       
@@ -122,7 +123,7 @@ if (isset($_POST['close'])){
                     <div class="form-group">
                       <label>CUSTOMER NAME</label>
                       <input type="text" class="form-control" id="exampleInputFirstName"
-                      placeholder="Customer Name" name="cusName" value="<?php echo $cusname; ?>">
+                      placeholder="Customer Name" name="cusName" disabled value="<?php echo $cusname; ?>">
                     </div>
                     </div>
 
@@ -130,7 +131,7 @@ if (isset($_POST['close'])){
                     <div class="form-group">
                       <label>MOBILE NUMBER</label>
                       <input type="text" class="form-control" id="exampleInputEmail" 
-                        placeholder="Mobile Number" name = "mobileNumber" required value= "<?php echo $mobileNumber; ?>">
+                        placeholder="Mobile Number" name = "mobileNumber" disabled value= "<?php echo $mobileNumber; ?>">
                     </div>
                     </div>
 
@@ -138,7 +139,7 @@ if (isset($_POST['close'])){
                     <div class="form-group">
                       <label>EMAIL</label>
                       <input type="text" class="form-control" id="exampleInputLastName" 
-                      placeholder="Email" name="email" value= "<?php echo  $email; ?>">
+                      placeholder="Email" name="email" disabled value= "<?php echo  $email; ?>">
                     </div>
                     </div>
 
@@ -149,7 +150,7 @@ if (isset($_POST['close'])){
                     <div class="form-group">
                       <label>EQUIPMENT</label>
                       <input type="text" class="form-control" id="exampleInputPassword" 
-                      placeholder="Name" name="equipment" required value= "<?php echo $device; ?>">
+                      placeholder="Name" name="equipment" disabled required value= "<?php echo $device; ?>">
                     </div>
                     </div>
 
@@ -157,7 +158,7 @@ if (isset($_POST['close'])){
                     <div class="col">
                     <div class="form-group">
                     <label>CHARGER</label>
-                    <input class="form-control" type="checkbox" name="charger" value="<?php echo $charger; ?>" id="flexCheckChecked" >
+                    <input class="form-control" type="checkbox" name="charger" disabled value="<?php echo $charger; ?>" id="flexCheckChecked" >
                     </div>
                     </div>
                     
@@ -165,7 +166,7 @@ if (isset($_POST['close'])){
                     <div class="form-group">
                       <label>QTY</label>
                       <input type="text" class="form-control" id="exampleInputPassword" 
-                      placeholder="Qty" name="qty" required <?php echo  $qty; ?>>
+                      placeholder="Qty" name="qty"  value="<?php echo  $qty; ?>" disabled>
                     </div>
                     </div>
                     
@@ -173,7 +174,7 @@ if (isset($_POST['close'])){
                     <div class="form-group">
                       <label>MODEL</label>
                       <input type="text" class="form-control" id="exampleInputPassword" 
-                      placeholder="Model" name="modelseq" required value= "<?php echo $model; ?>">
+                      placeholder="Model" name="modelseq"  disabled value="<?php echo $model; ?>">
                     </div>
                     </div>
                     
@@ -181,7 +182,7 @@ if (isset($_POST['close'])){
                     <div class="form-group">
                       <label>SERIAL NUMBER</label>
                       <input type="text" class="form-control" id="exampleInputPassword" 
-                      placeholder="Serial Number" name="serialNumber" required value= "<?php echo $serialnum; ?>">
+                      placeholder="Serial Number" name="serialNumber" disabled value= "<?php echo $serialnum; ?>">
                     </div>
                     </div>
                     <table id="tbl" class="table" >
@@ -194,7 +195,7 @@ if (isset($_POST['close'])){
                     <div class="form-group">
                       <label>FAULT DESCRIPTION</label>
                       <textarea type="text" class="form-control" id="exampleInputPasswordRepeat"
-                         name="fault" required ><?php echo $fault; ?></textarea>
+                         name="fault" disabled ><?php echo $fault; ?></textarea>
                     </div>
                     </div>
                     <div class="col">
@@ -204,11 +205,11 @@ if (isset($_POST['close'])){
                          name="workdone" required><?php echo  $work;?></textarea>
                     </div>
                     </div>
-
+                    
                   </div>
                   <div class="form-group">
                     <label class="label label-danger">TECHNICIAN ASSIGNED</label>
-                    <select name="technician" class="form-control" id="exampleInputPassword">
+                    <select name="technician" class="form-control" id="exampleInputPassword" disabled>
                       <option value="<?php echo $tecn; ?>"><?php echo $tecn;  ?></option>
                               <?php
                                 $query = "SELECT * FROM `users` WHERE `team`='Technical Support'";
@@ -219,9 +220,21 @@ if (isset($_POST['close'])){
                               ?>
                         </select>
                     </div>
-                    <hr>
+
+                    <div class="col-8">
                     <div class="form-group">
-                      <button type="submit" class="btn btn-success btn-block" name="addjobcard" >ADD JOB CARD</button>
+                      <label style="color: red;">CLOSE JOBCARD</label>
+                      <select name="closeJobcard" class="form-control" id="exampleInputPassword" required>
+                      <option>Select</option>
+                      <option style="color: red;" value="CLOSE">CLOSE</option>
+                        </select>
+                    </div>
+                    </div>
+                    <hr>
+                    <div class="col-6">
+                    <div class="form-group">
+                      <button type="submit" class="btn btn-danger btn-block" name="closejobcd" >CLOSE JOBCARD</button>
+                    </div>
                     </div>
           <hr> 
         </form>

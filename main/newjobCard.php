@@ -103,7 +103,7 @@ if(isset($_SESSION['iaddition'])){
                   
                  echo'<script>
                   setTimeout(()=>{
-                    window.open("/crm/main/jobCards.php", "_self");
+                    window.open("/crm/main/mainjobcards.php", "_self");
                   }, 4000)
                  
                  </script>';
@@ -202,7 +202,7 @@ if(isset($_SESSION['iaddition'])){
                     <div class="form-group">
                       <label>WORK DONE</label>
                       <textarea type="text" class="form-control" id="exampleInputPasswordRepeat"
-                         name="workdone" required></textarea>
+                         name="workdone" ></textarea>
                     </div>
                     </div>
 

@@ -1,6 +1,6 @@
 <?php
 require_once($_SERVER['DOCUMENT_ROOT'] . "/crm/connection.php");
-require_once($_SERVER['DOCUMENT_ROOT'] . "/crm/main/sendSms.php");
+require_once($_SERVER['DOCUMENT_ROOT'] . "/crm/sendSms.php");
 require_once($_SERVER['DOCUMENT_ROOT'] . "/crm/access.php");
 session_start();
 $success = null;

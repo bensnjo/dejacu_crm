@@ -1,6 +1,6 @@
 <?php
 require_once($_SERVER['DOCUMENT_ROOT'] . "/crm/connection.php");
-require_once($_SERVER['DOCUMENT_ROOT'] . "/crm/main/sendSms.php");
+require_once($_SERVER['DOCUMENT_ROOT'] . "/crm/sendSms.php");
 require_once($_SERVER['DOCUMENT_ROOT'] . "/crm/access.php");
 session_start();
 $success = null;
@@ -8,6 +8,17 @@ $db = getConnection();
 access();
 $groups = getgroups();
 
+if (isset($_POST['sendsms'])) {
+  $cont = $_POST['phoneNumber'];
+  $msg=$_POST['smsMessage'];
+ if(sendSMSnew($cont,$msg)) {
+  $succcess = "SMS sent Successfully";
+ }
+  if (isset($_SESSION['addition']) && $_SESSION['addition'] == "SMS sent Successfully ") {
+    $succcess = "SMS sent Successfully";
+    unset($_SESSION['addition']);
+  }
+}
 
 ?>
 <!DOCTYPE html>
@@ -74,7 +85,7 @@ $groups = getgroups();
           </div>';
             echo '<script>
           setTimeout(()=>{
-            window.open("/dejavucoms/panel/home.php", "_self");
+            window.open("/crm/main/smsrh.php", "_self");
           }, 2000)
          </script>';
           }
@@ -85,7 +96,7 @@ $groups = getgroups();
             <div class="col-lg-12">
               <div class="card mb-4">
                 <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                  <a class="btn btn-primary" href="/crm/admin/newgroup.php" role="button">Add group</a>
+                  <a class="btn btn-primary" href="/crm/main/newgroup.php" role="button">Add group</a>
                 </div>
                 <div class="table-responsive p-3">
                   <table class="table align-items-center table-flush" id="dataTable">

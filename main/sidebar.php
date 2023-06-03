@@ -16,6 +16,21 @@
       <div class="sidebar-heading">
         Features
       </div>
+      <li class="nav-item">
+        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#Collapseleads"
+          aria-expanded="true" aria-controls="collapseBootstrap">
+          <i class="fas fa-address-card fa-2x text-info"></i>
+          <span>LEADS</span>
+        </a>
+        <div id="Collapseleads" class="collapse" aria-labelledby="headingBootstrap" data-parent="#accordionSidebar">
+          <div class="bg-white py-2 collapse-inner rounded">
+            <h6 class="collapse-header">LEADS</h6>
+            <a class="collapse-item" href="aleads.php">ADD LEAD</a>
+            <a class="collapse-item" href="vleads.php">LEADS LIST</a>
+            <a class="collapse-item" href="vleadsa.php">MY LEADS</a>
+          </div>
+        </div>
+      </li>
       <!--  -->
       <li class="nav-item">
         <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseBootstrap"
@@ -26,7 +41,7 @@
         <div id="collapseBootstrap" class="collapse" aria-labelledby="headingBootstrap" data-parent="#accordionSidebar">
           <div class="bg-white py-2 collapse-inner rounded">
             <h6 class="collapse-header">CUSTOMERS</h6>
-            <a class="collapse-item" href="acustomer.php">ADD A CUSTOMER</a>
+            <a class="collapse-item" href="acustomer.php">CREATE CUSTOMER</a>
             <a class="collapse-item" href="vcustomers.php">CUSTOMERS LIST</a>
             <!-- <a class="collapse-item" href="vcustomers.php">EDIT A CUSTOMER</a> -->
           </div>
@@ -39,14 +54,14 @@
       <li class="nav-item">
         <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseBootstrap1"
           aria-expanded="true" aria-controls="collapseBootstrap">
-          <i class="fas fa-users fa-2x text-info"></i>
+          <i class="fas fa-microchip fa-2x text-info"></i>
           <span>DEVICES</span>
         </a>
         <div id="collapseBootstrap1" class="collapse" aria-labelledby="headingBootstrap" data-parent="#accordionSidebar">
           <div class="bg-white py-2 collapse-inner rounded">
             <h6 class="collapse-header">DEVICES</h6>
-            <a class="collapse-item" href="addDevice.php">ADD A DEVICE</a>
-            <a class="collapse-item" href="allDevices.php">ADDED DEVICES</a>
+            <a class="collapse-item" href="addDevice.php">CREATE DEVICE</a>
+            <a class="collapse-item" href="allDevices.php">DEVICES LIST</a>
             <!-- <a class="collapse-item" href="vcustomers.php">EDIT A CUSTOMER</a> -->
           </div>
         </div>
@@ -64,8 +79,10 @@
         <div id="collapseForm" class="collapse" aria-labelledby="headingForm" data-parent="#accordionSidebar">
           <div class="bg-white py-2 collapse-inner rounded">
             <h6 class="collapse-header">TICKETS</h6>
-            <a class="collapse-item" href="aticket.php">CREATE A TICKET</a>
-            <a class="collapse-item" href="cticket.php">ALL TICKETS</a>
+            <a class="collapse-item" href="aticket.php">CREATE TICKET</a>
+            <a class="collapse-item" href="cticket.php">TICKETS LIST</a>
+            <a class="collapse-item" href="cticket.php">MY TICKETS</a>
+            <a class="collapse-item" href="resoltickets.php">OPEN TICKETS</a>
             <a class="collapse-item" href="resoltickets.php">RESOLVED TICKETS</a>
             <!--<a class="collapse-item" href="cticket.php">TRANSFER A TICKET</a> -->
             
@@ -76,14 +93,17 @@
      <li class="nav-item">
         <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#jobCards"
           aria-expanded="true" aria-controls="collapseBootstrap">
-          <i class="fas fa-users fa-2x text-info"></i>
+          <i class="fas fa-address-card fa-2x text-info"></i>
           <span>JOB CARDS</span>
         </a>
         <div id="jobCards" class="collapse" aria-labelledby="headingBootstrap" data-parent="#accordionSidebar">
           <div class="bg-white py-2 collapse-inner rounded">
             <h6 class="collapse-header">JOB CARDS</h6>
-            <a class="collapse-item" href="newjobCard.php">ADD A JOB CARD</a>
-            <a class="collapse-item" href="mainjobcards.php">JOB CARDS</a>
+            <a class="collapse-item" href="newjobCard.php">CREATE JOB CARD</a>
+            <a class="collapse-item" href="mainjobcards.php">ALL JOB CARDS</a>
+            <a class="collapse-item" href="mainjobcards.php">MY JOB CARDS</a>
+            <a class="collapse-item" href="mainjobcards.php">OPEN JOB CARDS</a>
+            <a class="collapse-item" href="mainjobcards.php">CLOSED JOB CARDS</a>
         </div>
         </div>
       </li>
@@ -94,7 +114,7 @@
  <li class="nav-item">
         <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseBootstrapmsg"
           aria-expanded="true" aria-controls="collapseBootstrapmsg">
-          <i class="fas fa-users fa-2x text-info"></i>
+          <i class="fas fa-comment fa-2x text-info"></i>
           <span>MESSAGING</span>
         </a>
         <div id="collapseBootstrapmsg" class="collapse" aria-labelledby="headingBootstrap" data-parent="#accordionSidebar">
@@ -102,7 +122,6 @@
             <h6 class="collapse-header">MESSAGES</h6>
             <a class="collapse-item" href="emailrh.php">EMAILS</a>
             <a class="collapse-item" href="smsrh.php">SMS</a>
-            <!-- <a class="collapse-item" href="vcustomers.php">EDIT A CUSTOMER</a> -->
           </div>
         </div>
       </li>
@@ -112,7 +131,7 @@
       <!--  -->
       <li class="nav-item">
         <a class="nav-link" href="reportM.php">
-          <i class="fas fa-landmark fa-2x text-info"></i>
+          <i class="fas fa-th-list fa-2x text-info"></i>
           <span>REPORTS</span>
         </a>
       </li>
@@ -126,7 +145,7 @@
       
       <li class="nav-item">
         <a class="nav-link" href="">
-          <i class="fas fa-satellite-dish fa-2x text-info"></i>
+          <i class="fas fa-reply fa-2x text-info"></i>
           <span>COMMUNICATION</span>
         </a>
       </li>

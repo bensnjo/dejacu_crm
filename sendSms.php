@@ -80,7 +80,7 @@
             
             //$cont = mysqli_real_escape_string($db, $_POST['phoneNumber']);;
             //$msg = mysqli_real_escape_string($db, $_POST['smsMessage']);
-            set_time_limit(500);
+            set_time_limit(5000);
             $url = 'https://roberms.co.ke/sms/v1/roberms/send/simple/sms';
             $curl = curl_init();
             curl_setopt($curl, CURLOPT_URL, $url);

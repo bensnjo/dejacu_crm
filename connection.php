@@ -5,9 +5,9 @@ function getConnection($connectionType="mysqli"){
     $database = "crm";
     $username = "root";
     $password = '';
-    $hostname = "localhost:3308";
+    $hostname = "localhost:3306";
 
-    $connection;
+    
 
     if($connectionType == 'mysqli'){
         $connection = new mysqli($hostname, $username, $password, $database);

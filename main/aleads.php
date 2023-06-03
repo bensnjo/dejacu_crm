@@ -9,15 +9,13 @@ access();
 $success = null;
 $db = getConnection();
 
-if (isset($_POST['add'])) {
-  registercustomer();
-  $succcess = "Customer Added succcessfully";
+if (isset($_POST['addlead'])) {
+  registerlead();
+  $succcess = "Lead added succcessfully";
   //regcomplain();
   //admit($_SESSION['memberNo'],$_POST['temp']);
-
-
   if (isset($_SESSION['addition']) && $_SESSION['addition'] == "member added Successful ") {
-    $succcess = "Customer Added success";
+    $succcess = "Lead Added success";
     unset($_SESSION['addition']);
   }
 }
@@ -34,7 +32,7 @@ if (isset($_POST['add'])) {
   <meta name="description" content="">
   <meta name="author" content="">
   <link href="img/devajuLogo.jpeg" rel="icon">
-  <title>Dejavu Add Customer</title>
+  <title>Dejavu Add lead</title>
   <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
   <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css">
   <link href="css/ruang-admin.min.css" rel="stylesheet">
@@ -58,11 +56,11 @@ if (isset($_POST['add'])) {
         <!-- Container Fluid-->
         <div class="container-fluid" id="container-wrapper">
           <div class="d-sm-flex align-items-center justify-content-between mb-4">
-            <h1 class="h3 mb-0 text-gray-800">ADD A CUSTOMER</h1>
+            <h1 class="h3 mb-0 text-gray-800">Add a Lead</h1>
             <ol class="breadcrumb">
               <li class="breadcrumb-item"><a href="./">Home</a></li>
-              <li class="breadcrumb-item">Customers</li>
-              <li class="breadcrumb-item active" aria-current="page">Add Customer</li>
+              <li class="breadcrumb-item">Leads</li>
+              <li class="breadcrumb-item active" aria-current="page">Add lead</li>
             </ol>
           </div>
 
@@ -92,7 +90,7 @@ if (isset($_POST['add'])) {
 
             echo '<script>
           setTimeout(()=>{
-            window.open("/crm/main/vcustomers.php", "_self");
+            window.open("/crm/main/vleads.php", "_self");
           }, 2000)
          
          </script>';
@@ -107,7 +105,7 @@ if (isset($_POST['add'])) {
           <div class="col-lg-12">
               <div class="mb-4">
                 <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                  <h4 class="m-0 font-weight-bold text-primary"> +add Customer</h4>
+                  <h4 class="m-0 font-weight-bold text-danger"> +add lead</h4>
                   <hr>
                   </div>
                 </div>
@@ -118,43 +116,43 @@ if (isset($_POST['add'])) {
               <div class="col">
               <div class="form-group">
                 <label>NAME</label>
-                <input type="text" class="form-control" id="fnameInput" placeholder="Customer Name" name="cusname" required>
+                <input type="text" class="form-control" id="fnameInput" placeholder="Name" name="leadname" required>
               </div>
               </div>
 
-              <div class="col">
-              <div class="form-group">
-                <label>KRA PIN</label>
-                <input type="text" class="form-control" id="pinInput" placeholder="KRA pin" name="pin">
-              </div>
-              </div>
-
-              <div class="col">
-              <div class="form-group">
-                <label>ID/CERT NO</label>
-                <input type="text" class="form-control" id="idInput" aria-describedby="emailHelp" placeholder="ID Number" name="idNo">
-              </div>
-              </div>
-              </div>
-              <div class="row">
-              <div class="col">
-              <div class="form-group">
-                <label>MOBILE NUMBER</label>
-                <input type="text" class="form-control" id="mobileInput" pattern="[0-9]{10,12}" placeholder=" Mobile Number" name="phoneNumber" required>
-              </div>
-              </div>
               <div class="col">
               <div class="form-group">
                 <label>BUSINESS NAME</label>
-                <input type="text" class="form-control" id="mnameInput" aria-describedby="emailHelp" placeholder="Business Name" name="businessName">
+                <input type="text" class="form-control" id="pinInput" placeholder="Business name" name="businessname">
+              </div>
+              </div>
+
+              <div class="col">
+              <div class="form-group">
+                <label>PHONE NUMBER</label>
+                <input type="text" class="form-control" id="idInput" aria-describedby="emailHelp" placeholder="Phone number" name="phonenumber">
               </div>
               </div>
               </div>
               <div class="row">
               <div class="col">
               <div class="form-group">
-                <label>BUSINESS ADDRESS</label>
-                <input type="text" class="form-control" id="exampleInputPassword" placeholder="Business Address" name="businessAddress" required>
+                <label>LOCATION/LOCALE</label>
+                <input type="text" class="form-control" id="mobileInput" placeholder="Location" name="location" required>
+              </div>
+              </div>
+              <div class="col">
+              <div class="form-group">
+                <label>EMAIL</label>
+                <input type="text" class="form-control" id="mnameInput" aria-describedby="emailHelp" placeholder="email" name="email">
+              </div>
+              </div>
+              </div>
+              <div class="row">
+              <div class="col">
+              <div class="form-group">
+                <label>INDUSTRY/TYPE OF BUSINESS</label>
+                <input type="text" class="form-control" id="exampleInputPassword" placeholder="Type of business" name="industry" required>
               </div>
               </div>
               <div class="col">
@@ -163,7 +161,7 @@ if (isset($_POST['add'])) {
                 <select name="county" class="form-control" id="exampleInputPassword">
                   <option value="" selected="selected"> Select a County</option>
                   <?php
-                  $query = "SELECT * FROM `county`";
+                  $query = "SELECT * FROM `county` order by `countyName`";
                   $result = mysqli_query($db, $query);
                   foreach ($result as $row) {
                     echo "<option value='" . $row['countyName'] . "'>" . $row['countyName'] . "</option>";
@@ -172,17 +170,11 @@ if (isset($_POST['add'])) {
                 </select>
                 </div>
               </div>
-              <div class="col">
-              <div class="form-group">
-                <label>EMAIL</label>
-                <input type="email" class="form-control" id="exampleInputEmail" aria-describedby="emailHelp" placeholder="Business or Customer email" name="email" required>
-              </div>
-              </div>
               </div>
               <div class="row">
               <div class="col">
               <div class="form-group" style="margin-top: 10px">
-                <button type="submit" class="btn btn-primary btn-block" name="add">ADD CUSTOMER</button>
+                <button type="submit" class="btn btn-danger btn-block" name="addlead">ADD LEAD</button>
               </div>
               </div>
               <div class="col">

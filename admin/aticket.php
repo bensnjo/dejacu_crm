@@ -1,8 +1,8 @@
 <?php
 //require_once($_SERVER['DOCUMENT_ROOT']."/crm/connection.php");
-require_once($_SERVER['DOCUMENT_ROOT']."/crm/member.php");
-require_once($_SERVER['DOCUMENT_ROOT']."/crm/connection.php");
-require_once($_SERVER['DOCUMENT_ROOT']."/crm/access.php");
+require_once($_SERVER['DOCUMENT_ROOT'] . "/crm/member.php");
+require_once($_SERVER['DOCUMENT_ROOT'] . "/crm/connection.php");
+require_once($_SERVER['DOCUMENT_ROOT'] . "/crm/access.php");
 session_start();
 access();
 $db = getConnection();
@@ -10,39 +10,26 @@ $succcess = null;
 
 $existingCust = [];
 
-if(isset($_POST['searchQ'])){
- $sq = $_POST['searchQ'];
+if (isset($_POST['searchQ'])) {
+  $sq = $_POST['searchQ'];
 
- $db = getConnection();
- $query = "SELECT * FROM `customers` WHERE `idNo` = '$sq' OR `pin` = '$sq' OR `email`= '$sq'";
- $res = mysqli_query($db, $query);
- $existingCust = mysqli_fetch_assoc($res);
-
- if(count($existingCust)> 0){
-   $_SESSION['isExisting'] = true;
- }else{
-   $existingCust = null;
- }
-}
-if (isset($_POST['addTicket'])){
-  $cusName = mysqli_real_escape_string($db, $_POST['cusName']);
-  $mobileNumber = mysqli_real_escape_string($db, $_POST['mobileNumber']);
   $db = getConnection();
- $query = "SELECT * FROM `customers` WHERE `cusName`='$cusName' AND `phoneNumber`='$mobileNumber'";
- $res = mysqli_query($db, $query);
- if(mysqli_fetch_assoc($res)){
-  regcomplain();
- }
- else{
-  $existingCust = null;
- }
-  
-  //
-    //admit($_SESSION['memberNo'],$_POST['temp']);
+  $query = "SELECT * FROM `customers` WHERE `idNo` = '$sq' OR `pin` = '$sq' OR `email`= '$sq'";
+  $res = mysqli_query($db, $query);
+  $existingCust = mysqli_fetch_assoc($res);
 
-  unset($_SESSION['isExisting']);  unset($_POST['searchQ']);
+  if (count($existingCust) > 0) {
+    $_SESSION['isExisting'] = true;
+  } else {
+    $existingCust = null;
+  }
 }
-if(isset($_SESSION['iaddition'])){
+if (isset($_POST['addTicket'])) {
+  regcomplain();
+  unset($_SESSION['isExisting']);
+  unset($_POST['searchQ']);
+}
+if (isset($_SESSION['iaddition'])) {
   $succcess = $_SESSION['iaddition'];
 
   unset($_SESSION['iaddition']);
@@ -69,14 +56,14 @@ if(isset($_SESSION['iaddition'])){
   <div id="wrapper">
     <!-- Sidebar -->
     <?php
-      include('sidebar.php');
+    include('sidebar.php');
     ?>
     <!-- Sidebar -->
     <div id="content-wrapper" class="d-flex flex-column">
       <div id="content">
         <!-- TopBar -->
         <?php
-         include('topbar.php');
+        include('topbar.php');
         ?>
         <!-- Topbar -->
         <!-- Container Fluid-->
@@ -92,152 +79,160 @@ if(isset($_SESSION['iaddition'])){
 
           <!-- PUT YOUR CODE HERE -->
           <?php
-          if(count($errors)> 0){
-                    echo '
+          if (count($errors) > 0) {
+            echo '
                     <div class="alert alert-danger alert-dismissible" role="alert">
                     <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                       <span aria-hidden="true">&times;</span>
                     </button>
-                    '.$errors[0].'
+                    ' . $errors[0] . '
                   </div>
                     ';
-                }
+          }
 
-                if(isset($succcess)){
-                  echo  '<div class="alert alert-success alert-dismissible fade show ml-4 mr-4" des$designation="alert">
-                  '.$succcess.'
+          if (isset($succcess)) {
+            echo  '<div class="alert alert-success alert-dismissible fade show ml-4 mr-4" des$designation="alert">
+                  ' . $succcess . '
                   <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                   </button>
                 </div>';
-      
-                  
-                 echo'<script>
+
+
+            echo '<script>
                   setTimeout(()=>{
                     window.open("/crm/admin/cticket.php", "_self");
-                  }, 4000)
+                  }, 500)
                  
                  </script>';
-      
-                 }
-                   ?>
+          }
+          ?>
 
-<div class="card col-xl-12 col-md-12 mb-4 p-5">
-<form method="POST">
-           <div>
-           <h2 class="h3 mb-0 text-gray-800">Add Ticket</h2>
-           </div>
-          </form> 
-                <hr> <form action="" method="POST" class="p-4"><div class="row">
-                      <div class="col">
-                    <div class="form-group">
-                      <label>CUSTOMER NAME</label>
-                      <input type="text" class="form-control" id="exampleInputFirstName"
-                      placeholder="Customer Name" name="cusName" value= "<?php if($existingCust) echo $existingCust['pin']; ?>">
-                    </div>
+          <div class="card col-xl-12 col-md-12 mb-4 p-5">
+            <form method="POST">
+              <div>
+                <h2 class="h3 mb-0 text-gray-800">Add Ticket</h2>
+              </div>
+            </form>
+            <hr>
+            <form action="" method="POST" class="p-4">
+              <div class="form-group row">
+                <div class="col">
+                  <div class="form-group">
+                    <label>CUSTOMER NAME</label>
+                    <input type="text" class="form-control" id="exampleInputFirstName" placeholder="Customer Name" name="cusName" value="<?php if ($existingCust) echo $existingCust['pin']; ?>">
+                  </div>
                 </div>
                 <div class="col">
-                    <div class="form-group">
-                      <label>MOBILE NUMBER</label>
-                      <input type="text" class="form-control" id="exampleInputEmail" pattern = "[0-9]{10,12}" 
-                        placeholder="Mobile Number" name = "mobileNumber" required value= "<?php if($existingCust) echo $existingCust['tell']; ?>">
+                  <div class="form-group">
+                    <label>MOBILE NUMBER</label>
+                    <input type="text" class="form-control" id="exampleInputEmail" pattern="[0-9]{10,12}" placeholder="Mobile Number" name="mobileNumber" required value="<?php if ($existingCust) echo $existingCust['tell']; ?>">
+                  </div>
                 </div>
+              </div>
+              <div class="form-group row">
+                <div class="col">
+                  <div class="form-group">
+                    <label>BUSINESS NAME</label>
+                    <input type="text" class="form-control" id="exampleInputLastName" placeholder="Business Name" name="businessName" value="<?php if ($existingCust) echo $existingCust['firstName']; ?>">
+                  </div>
                 </div>
+                <div class="col">
+                  <div class="form-group">
+                    <label>SERIAL NUMBER</label>
+                    <input type="text" class="form-control" id="exampleInputPassword" placeholder="Device Serial Number" name="serialNumber" required value="<?php if ($existingCust) echo $existingCust['lastName']; ?>">
+                  </div>
                 </div>
-                <div class="row">
-                      <div class="col">
-                    <div class="form-group">
-                      <label>BUSINESS NAME</label>
-                      <input type="text" class="form-control" id="exampleInputLastName" 
-                      placeholder="Business Name" name="businessName" value= "<?php if($existingCust) echo $existingCust['firstName']; ?>">
-                    </div>
-                    </div>
-                    <div class="col">
-                    <div class="form-group">
-                      <label>SERIAL NUMBER</label>
-                      <input type="text" class="form-control" id="exampleInputPassword" 
-                      placeholder="Device Serial Number" name="serialNumber" required value= "<?php if($existingCust) echo $existingCust['lastName']; ?>">
-                    </div>
-                    </div>
-                    </div>
+              </div>
 
-                    <div class="row">
-                      <div class="col">
-                    <div class="form-group">
+              <div class="form-group row">
+                <div class="col">
+                  <div class="form-group">
                     <label class="label label-danger">SOURCE TYPE</label>
-                        <select name="source" class="form-control" id="exampleInputPassword">
-                          <option>Select</option>
-                          <option value="TELEPHONE">TELEPHONE</option>
-                          <option value="WALK IN" >WALK IN</option>
-                        </select>
-                    </div>
-                    </div>
-                    <div class="col">
-                    <div class="form-group">
+                    <select name="source" class="form-control" id="exampleInputPassword">
+                      <option>Select</option>
+                      <option value="TELEPHONE">TELEPHONE</option>
+                      <option value="WALK IN">WALK IN</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="col">
+                  <div class="form-group">
                     <label class="label label-danger">DEVICE STATUS</label>
                     <select name="dStatus" class="form-control" id="exampleInputPassword">
-                          <option>Select</option>
-                          <option value="BOOKED IN">BOOKED IN</option>
-                          <option value="NOT BOOKED IN">NOT BOOKED IN</option>
-                        </select>
-                    </div>
-                    </div>
-                    </div>
-                    <div class="row">
-                      <div class="col">
-                    <div class="form-group">
+                      <option>Select</option>
+                      <option value="BOOKED IN">BOOKED IN</option>
+                      <option value="NOT BOOKED IN">NOT BOOKED IN</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+              <div class=" form-group row">
+                <div class="col">
+                  <div class="form-group">
                     <label class="label label-danger">PRIORITY</label>
                     <select name="priority" class="form-control" id="exampleInputPassword">
-                         <option>Select</option>
-                          <option value="HIGH">HIGH</option>
-                          <option value="MEDIUM">MEDIUM</option>
-                          <option value="LOW">LOW</option>
-                        </select>
-                    </div>
-                    
-                    </div>
-                    <div class="col">
-                    <div class="form-group">
+                      <option>Select</option>
+                      <option value="HIGH">HIGH</option>
+                      <option value="MEDIUM">MEDIUM</option>
+                      <option value="LOW">LOW</option>
+                    </select>
+                  </div>
+
+                </div>
+                <div class="col">
+                  <div class="form-group">
                     <label class="label label-danger">ASSIGNED</label>
                     <select name="assigned" class="form-control" id="exampleInputPassword">
                       <option>Select</option>
-                              <?php
-                                $query = "SELECT * FROM `users`";
-                                $result = mysqli_query($db,$query);
-                                  foreach($result as $row)  {                                          
-                                  echo "<option value='".$row['full_names']."'>".$row['full_names']."</option>";
-                                  }
-                              ?>
-                  
-                        </select>
-                    </div>
-                    </div>
-                    </div>
-                    <div class="form-group">
-                      <label>TICKET DESCRIPTION</label>
-                      <textarea type="text" class="form-control" id="exampleInputPasswordRepeat"
-                         name="complain" required></textarea>
-                    </div>
-                    
-                    <div class="form-group">
-                      <button type="submit" class="btn btn-success btn-block" name="addTicket" >ADD TICKET</button>
-                    </div>
+                      <?php
+                      $query = "SELECT * FROM `users`";
+                      $result = mysqli_query($db, $query);
+                      foreach ($result as $row) {
+                        echo "<option value='" . $row['full_names'] . "'>" . $row['full_names'] . "</option>";
+                      }
+                      ?>
+                    </select>
+                  </div>
+                </div>
+                </div>
+                <div class="form-group row">
+                <div class="col-10"> 
+                <div class="form-group">
+                  <label>TICKET DESCRIPTION</label>
+                  <textarea type="text" class="form-control" id="exampleInputPasswordRepeat" name="complain" rows="3" required ></textarea>
+                </div>
+                </div>
+                <div class="col-2"> 
+                <div class="form-group">
+                  <label>TICKET RESEOLVED</label>
+                  <select name="resolved" class="form-control" id="exampleInputPassword">
+                      <option value="OPEN" selected>OPEN</option>
+                      <option value="CLOSED">CLOSED</option>
+                      
+                    </select>
+                </div>
+                </div>
+                </div>
 
-                    <hr> 
-        </form>
-        </div>
-   
+                  <div class="form-group">
+                    <button type="submit" class="btn btn-success btn-block" name="addTicket">ADD TICKET</button>
+                  </div>
+
+                  <hr>
+            </form>
+          </div>
+
           <!-- YOUR CODE ENDS HERE -->
           <!-- Documentation Link -->
           <div class="row">
             <div class="col-lg-12">
-              
+
             </div>
           </div>
 
           <!-- Modal Logout -->
-          <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabelLogout"
-            aria-hidden="true">
+          <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabelLogout" aria-hidden="true">
             <div class="modal-dialog" role="document">
               <div class="modal-content">
                 <div class="modal-header">
@@ -263,7 +258,7 @@ if(isset($_SESSION['iaddition'])){
 
       <!-- Footer -->
       <?php
-        //include('footer.php');
+      //include('footer.php');
       ?>
       <!-- Footer -->
     </div>
@@ -284,7 +279,7 @@ if(isset($_SESSION['iaddition'])){
 
   <!-- Page level custom scripts -->
   <script>
-    $(document).ready(function () {
+    $(document).ready(function() {
       $('#dataTable').DataTable(); // ID From dataTable 
       $('#dataTableHover').DataTable(); // ID From dataTable with Hover
     });

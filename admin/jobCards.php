@@ -9,7 +9,7 @@ admin();
 
 $agent = $_SESSION['username'];
 
-$jobcards = getAgentjobcards($agent);
+$jobcards = getAlljobcards();
 
 ?>
 
@@ -74,6 +74,7 @@ $jobcards = getAgentjobcards($agent);
                         <th>Device</th>
                         <th>Status</th>
                         <th>OPT</th>
+                        <th>Close</th>
                       </tr>
                     </thead>
                    
@@ -104,6 +105,9 @@ $jobcards = getAgentjobcards($agent);
                                 print "<td>" . $status. "</td>";
                                 print("<td>");
                                 print('<a " href="/crm/admin/jBoard.php?jobcardNo='.$jobcardno.'"><i class="fa fa-eye"></i></a>');
+                                print("</td>");
+                                print("<td>");
+                                print('<a " href="/crm/admin/closejbc.php?jobcardNo='.$jobcardno.'"><i class="fa fa-cog"></i></a>');
                                 print("</td>");
                             
                                 
