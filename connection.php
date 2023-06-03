@@ -2,12 +2,13 @@
 
 function getConnection($connectionType="mysqli"){
 
-    $database = "crm";
-    $username = "root";
-    $password = '';
-    $hostname = "localhost:3306";
-
     
+    $database = "dejavute_crm";
+    $username = "dejavute_crm";
+    $password = "Password@2023";
+    $hostname = "localhost";
+
+    $connection;
 
     if($connectionType == 'mysqli'){
         $connection = new mysqli($hostname, $username, $password, $database);
