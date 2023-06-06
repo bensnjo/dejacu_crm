@@ -293,20 +293,11 @@ function getAlljobcards()
 
     return $result;
 }
-function getAgentTikets($agent, $resolved = false)
+function getAgentTikets($agent)
 {
     $db = getConnection();
-    $query = "SELECT * FROM insidence WHERE createdBy = '$agent'  AND `status`= 'OPEN' ORDER BY id DESC ";
-
-    if ($resolved) {
-        $query = "SELECT * FROM insidence WHERE createdBy = '$agent'  AND `status`= 'closed' ORDER BY id DESC ";
-    }
-
+    $query = "SELECT * FROM insidence WHERE createdBy = '$agent' ORDER BY id DESC ";
     $result = mysqli_query($db, $query);
-    // if(mysqli_error($db)){
-    //     echo mysqli_error($db);
-    // }
-
     return $result;
 }
 
@@ -459,6 +450,13 @@ function allTickets()
     $result = mysqli_query($db, $query);
     return $result;
 }
+function openTickets()
+{   $status="OPEN";
+    $db = getConnection();
+    $query = "SELECT * FROM `insidence` WHERE `status`='$status'";
+    $result = mysqli_query($db, $query);
+    return $result;
+}
 function groupcontact($id)
 {
     $db = getConnection();
@@ -538,10 +536,26 @@ function allResolvedTickets()
 }
 //get child ticket
 
-function childTickets($ticketNo)
+function getclosedjobcards()
+{
+    
+    $db = getConnection();
+    $query = "SELECT * FROM `jobcards` WHERE `status`=0";
+    $result = mysqli_query($db, $query);
+    return $result;
+}
+function getopenjobcards()
+{
+    
+    $db = getConnection();
+    $query = "SELECT * FROM `jobcards` WHERE `status`=1";
+    $result = mysqli_query($db, $query);
+    return $result;
+}
+function getmyjobcards($agent)
 {
     $db = getConnection();
-    $query = "SELECT * FROM childIncident WHERE  tiketNo = '$ticketNo'";
+    $query = "SELECT * FROM `jobcards` WHERE `techn`='$agent' or `createdBy`='$agent'";
     $result = mysqli_query($db, $query);
     return $result;
 }

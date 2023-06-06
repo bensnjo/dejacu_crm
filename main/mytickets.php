@@ -3,10 +3,9 @@ require_once($_SERVER['DOCUMENT_ROOT']."/crm/connection.php");
 require_once($_SERVER['DOCUMENT_ROOT']."/crm/member.php");
 require_once($_SERVER['DOCUMENT_ROOT']."/crm/access.php");
 session_start();
-
 access();
-
-$tickets = allTickets();
+$agent = $_SESSION['username'];
+$tickets = getAgentTikets($agent);
 
 ?>
 
@@ -44,32 +43,28 @@ $tickets = allTickets();
         <!-- Container Fluid-->
         <div class="container-fluid" id="container-wrapper">
           <div class="d-sm-flex align-items-center justify-content-between mb-4">
-            <h1 class="h3 mb-0 text-gray-800">Tickets</h1>
+            <h1 class="h3 mb-0 text-gray-800">My Tickets</h1>
             <ol class="breadcrumb">
               <li class="breadcrumb-item"><a href="./">Home</a></li>
               <li class="breadcrumb-item">tickets</li>
               <li class="breadcrumb-item active" aria-current="page">create ticket</li>
             </ol>
           </div>
-
           <!-- PUT YOUR CODE HERE -->
           <div class="col-lg-12">
               <div class="card mb-4">
                 <div class="card-header py-3 d-flex flex-row align-items-right justify-content-between">
-
                 <a class ="btn btn-primary" href = "aticket.php">
                 <h6>+ ADD NEW TICKET</h6>
                 </a>
                 </div>
               </div>
             </div>
-
-
              <!-- Datatables -->
              <div class="col-lg-12">
               <div class="card mb-4">
                 <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                  <h6 class="m-0 font-weight-bold text-primary">ALL TICKETS</h6>
+                  <h6 class="m-0 font-weight-bold text-primary">MY TICKETS</h6>
                 </div>
                 <div class="table-responsive p-3">
                   <table class="table align-items-center col-lg-12" id="dataTable">
@@ -82,6 +77,7 @@ $tickets = allTickets();
                         <th>Customer</th>
                         <th>Assigned</th>
                         <th>Status</th>
+                        <th>Edit</th>
                         <th>Reslv</th>
                       </tr>
                     </thead>
@@ -106,6 +102,9 @@ $tickets = allTickets();
                                 print "<td>" .$CustomerName. "</td>";
                                 print "<td>" . $AssignedTo. "</td>";
                                 print "<td>" . $status. "</td>";
+                                print("<td>");
+                                print('<a " href="/crm/main/achild.php?id='.$row['id'].'"><i class="fa fa-edit"></i></a>');
+                                print("</td>");
                                 print("<td>");
                                 print('<a " href="/crm/main/resolveTicket.php?id='.$row['id'].'"><i class="fa fa-check-square"></i></a>');
                                 print("</td>");

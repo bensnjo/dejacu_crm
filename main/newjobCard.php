@@ -184,11 +184,6 @@ if(isset($_SESSION['iaddition'])){
                       placeholder="Serial Number" name="serialNumber" required value= "">
                     </div>
                     </div>
-                    <span><button class=" btn-primary">+</button></span>
-                    <table id="tbl" class="table" >
-                      <tbody>
-                      </tbody>
-                     </table>
                   </div>
                   <div class="row">
                     <div class="col">

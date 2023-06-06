@@ -6,7 +6,7 @@ session_start();
 
 access();
 
-$tickets = allTickets();
+$tickets = openTickets();
 
 ?>
 
@@ -44,11 +44,11 @@ $tickets = allTickets();
         <!-- Container Fluid-->
         <div class="container-fluid" id="container-wrapper">
           <div class="d-sm-flex align-items-center justify-content-between mb-4">
-            <h1 class="h3 mb-0 text-gray-800">Tickets</h1>
+            <h1 class="h3 mb-0 text-gray-800">Open Tickets</h1>
             <ol class="breadcrumb">
               <li class="breadcrumb-item"><a href="./">Home</a></li>
               <li class="breadcrumb-item">tickets</li>
-              <li class="breadcrumb-item active" aria-current="page">create ticket</li>
+              <li class="breadcrumb-item active" aria-current="page">open ticket</li>
             </ol>
           </div>
 
@@ -69,7 +69,7 @@ $tickets = allTickets();
              <div class="col-lg-12">
               <div class="card mb-4">
                 <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                  <h6 class="m-0 font-weight-bold text-primary">ALL TICKETS</h6>
+                  <h6 class="m-0 font-weight-bold text-primary">OPEN TICKETS</h6>
                 </div>
                 <div class="table-responsive p-3">
                   <table class="table align-items-center col-lg-12" id="dataTable">

@@ -2,7 +2,7 @@
 
 function getConnection($connectionType="mysqli"){
 
-    $database = "crm";
+    $database = "dejavute_crm";
     $username = "root";
     $password = '';
     $hostname = "localhost:3306";

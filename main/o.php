@@ -82,6 +82,7 @@ $tickets = allTickets();
                         <th>Customer</th>
                         <th>Assigned</th>
                         <th>Status</th>
+                        <th>Edit</th>
                         <th>Reslv</th>
                       </tr>
                     </thead>
@@ -106,6 +107,9 @@ $tickets = allTickets();
                                 print "<td>" .$CustomerName. "</td>";
                                 print "<td>" . $AssignedTo. "</td>";
                                 print "<td>" . $status. "</td>";
+                                print("<td>");
+                                print('<a " href="/crm/main/achild.php?id='.$row['id'].'"><i class="fa fa-edit"></i></a>');
+                                print("</td>");
                                 print("<td>");
                                 print('<a " href="/crm/main/resolveTicket.php?id='.$row['id'].'"><i class="fa fa-check-square"></i></a>');
                                 print("</td>");

@@ -81,8 +81,8 @@
             <h6 class="collapse-header">TICKETS</h6>
             <a class="collapse-item" href="aticket.php">CREATE TICKET</a>
             <a class="collapse-item" href="cticket.php">TICKETS LIST</a>
-            <a class="collapse-item" href="cticket.php">MY TICKETS</a>
-            <a class="collapse-item" href="resoltickets.php">OPEN TICKETS</a>
+            <a class="collapse-item" href="mytickets.php">MY TICKETS</a>
+            <a class="collapse-item" href="opentickets.php">OPEN TICKETS</a>
             <a class="collapse-item" href="resoltickets.php">RESOLVED TICKETS</a>
             <!--<a class="collapse-item" href="cticket.php">TRANSFER A TICKET</a> -->
             
@@ -101,9 +101,9 @@
             <h6 class="collapse-header">JOB CARDS</h6>
             <a class="collapse-item" href="newjobCard.php">CREATE JOB CARD</a>
             <a class="collapse-item" href="mainjobcards.php">ALL JOB CARDS</a>
-            <a class="collapse-item" href="mainjobcards.php">MY JOB CARDS</a>
-            <a class="collapse-item" href="mainjobcards.php">OPEN JOB CARDS</a>
-            <a class="collapse-item" href="mainjobcards.php">CLOSED JOB CARDS</a>
+            <a class="collapse-item" href="myjobcards.php">MY JOB CARDS</a>
+            <a class="collapse-item" href="openjobcards.php">OPEN JOB CARDS</a>
+            <a class="collapse-item" href="closedjobcards.php">CLOSED JOB CARDS</a>
         </div>
         </div>
       </li>

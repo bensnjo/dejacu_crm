@@ -5,8 +5,8 @@ require_once($_SERVER['DOCUMENT_ROOT']."/crm/access.php");
 session_start();
 
 access();
-
-$tickets = allTickets();
+$agent = $_SESSION['username'];
+$jobcards =  getclosedjobcards();
 
 ?>
 
@@ -20,7 +20,7 @@ $tickets = allTickets();
   <meta name="description" content="">
   <meta name="author" content="">
   <link href="img/devajuLogo.jpeg" rel="icon">
-  <title>Dejavu Tickets</title>
+  <title>Dejavu Job cards</title>
   <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
   <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css">
   <link href="css/ruang-admin.min.css" rel="stylesheet">
@@ -44,70 +44,67 @@ $tickets = allTickets();
         <!-- Container Fluid-->
         <div class="container-fluid" id="container-wrapper">
           <div class="d-sm-flex align-items-center justify-content-between mb-4">
-            <h1 class="h3 mb-0 text-gray-800">Tickets</h1>
+            <h1 class="h3 mb-0 text-gray-800">Closed Job Cards</h1>
             <ol class="breadcrumb">
               <li class="breadcrumb-item"><a href="./">Home</a></li>
-              <li class="breadcrumb-item">tickets</li>
-              <li class="breadcrumb-item active" aria-current="page">create ticket</li>
+              <li class="breadcrumb-item">Job Cards</li>
+              <li class="breadcrumb-item active" aria-current="page">Closed Job Cards</li>
             </ol>
           </div>
 
           <!-- PUT YOUR CODE HERE -->
-          <div class="col-lg-12">
-              <div class="card mb-4">
-                <div class="card-header py-3 d-flex flex-row align-items-right justify-content-between">
-
-                <a class ="btn btn-primary" href = "aticket.php">
-                <h6>+ ADD NEW TICKET</h6>
-                </a>
-                </div>
-              </div>
-            </div>
-
-
              <!-- Datatables -->
              <div class="col-lg-12">
               <div class="card mb-4">
                 <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                  <h6 class="m-0 font-weight-bold text-primary">ALL TICKETS</h6>
+                  <h6 class="m-0 font-weight-bold text-primary">CLOSED JOB CARDS</h6>
                 </div>
                 <div class="table-responsive p-3">
-                  <table class="table align-items-center col-lg-12" id="dataTable">
+                  <table class="table align-items-center table-flush" id="dataTable">
                     <thead class="">
                       <tr>
                         <th>No.</th>
-                        <th>Ticket No</th>
                         <th>Date</th>
-                        <th>Serial</th>
+                        <th>Jobcard No</th>
                         <th>Customer</th>
-                        <th>Assigned</th>
+                        <th>Contact</th>
+                        <th>Device</th>
                         <th>Status</th>
-                        <th>Reslv</th>
+                        <th>OPT</th>
+                        <th>Close</th>
                       </tr>
                     </thead>
+                   
+                    <tbody>
                          <?php
-
-                              $no=0;
-                            foreach($tickets as $row){
-
-                                $dateCreated = substr($row['dateCreated'],0,-10);
-                                $TicketNo = $row['ticketNumber'];
-                                $CustomerName = $row['cusName'];
-                                $mobileNumber=$row['mobileNumber'];
-                                $serialNumber=$row['serialNumber'];
-                                $status=$row['status'];
-                                $AssignedTo=$row['AssignedTo'];
-
+                               $No=0;
+                            foreach($jobcards as $jobcard){
+                                $db = getConnection();
+                                $dateCreated =substr($jobcard['dateCreated'],0,-10);
+                                $jobcardno = $jobcard['jbcrdNum'];
+                                $CustomerName = $jobcard['customer'];
+                                $CustomerNum = $jobcard['phoneNumber'];
+                                $device = $jobcard['devicename'];
+                                $sStatus= $jobcard['status'];
+                                if($sStatus==1){
+                                  $status="OPEN";
+                                }
+                                else{
+                                  $status="CLOSED";
+                                }
                                 print " <tr> ";
-                                print "<td>"  .++$no ."</td>";
-                                print "<td>" .$TicketNo . "</td>";
-                                print "<td>" .$dateCreated. "</td>";
-                                print "<td>" . $serialNumber. "</td>";
-                                print "<td>" .$CustomerName. "</td>";
-                                print "<td>" . $AssignedTo. "</td>";
+                                print "<td>" . ++$No. "</td>";
+                                print "<td>" . $dateCreated. "</td>";
+                                print "<td>" . $jobcardno. "</td>";
+                                print "<td>" . $CustomerName. "</td>";
+                                print "<td>" . $CustomerNum. "</td>";
+                                print "<td>" . $device. "</td>";
                                 print "<td>" . $status. "</td>";
                                 print("<td>");
-                                print('<a " href="/crm/main/resolveTicket.php?id='.$row['id'].'"><i class="fa fa-check-square"></i></a>');
+                                print('<a " href="/crm/admin/jBoard.php?jobcardNo='.$jobcardno.'"><i class="fa fa-eye"></i></a>');
+                                print("</td>");
+                                print("<td>");
+                                print('<a " href="/crm/admin/closejbc.php?jobcardNo='.$jobcardno.'"><i class="fa fa-cog"></i></a>');
                                 print("</td>");
                             
                                 
@@ -121,6 +118,15 @@ $tickets = allTickets();
               </div>
             </div>
             <!-- DataTable with Hover -->
+
+
+
+
+
+
+
+
+
           <!-- YOUR CODE ENDS HERE -->
          
           </div>
