@@ -2,7 +2,7 @@
 
 function getConnection($connectionType="mysqli"){
 
-
+    
     $database = "dejavute_crm";
     $username = "dejavute_crm";
     $password = "Password@2023";
