@@ -1,24 +1,25 @@
 <?php
-require_once($_SERVER['DOCUMENT_ROOT']."/crm/connection.php");
-require_once($_SERVER['DOCUMENT_ROOT']."/crm/member.php");
-require_once($_SERVER['DOCUMENT_ROOT']."/crm/stat.php");
-require_once($_SERVER['DOCUMENT_ROOT']."/crm/access.php");
+require_once($_SERVER['DOCUMENT_ROOT'] . "/crm/connection.php");
+require_once($_SERVER['DOCUMENT_ROOT'] . "/crm/member.php");
+require_once($_SERVER['DOCUMENT_ROOT'] . "/crm/stat.php");
+require_once($_SERVER['DOCUMENT_ROOT'] . "/crm/access.php");
 session_start();
-
 access();
-
 //access();
 $agent = $_SESSION['username'];
-$data = getAgentTiket($agent);
+$data = getAgentTicketz($agent);
+$alljobs=AllJ();
+$allmyjobs=AllMyJ($agent);
+$allCj=AllclosedJ();
 $noOfTickets = noOfTickets();
-$openT = openT();
+$allT = AllT();
 $closedT = closedT($agent);
+$openT = openT();
 $myT = myT($agent);
-
+$ticketper= perctT();
 ?>
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -32,7 +33,6 @@ $myT = myT($agent);
   <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css">
   <link href="css/ruang-admin.min.css" rel="stylesheet">
 </head>
-
 <body id="page-top">
   <div id="wrapper">
     <!-- Sidebar -->
@@ -45,7 +45,7 @@ $myT = myT($agent);
       <div id="content">
         <!-- TopBar -->
         <?php
-            include('topbar.php');
+        include('topbar.php');
         ?>
         <!-- Topbar -->
 
@@ -66,11 +66,10 @@ $myT = myT($agent);
                 <div class="card-body">
                   <div class="row align-items-center">
                     <div class="col mr-2">
-                      <div class="text-xs font-weight-bold text-uppercase mb-1">OPEN TICKETS</div>
-                      <div class="h5 mb-0 font-weight-bold text-gray-800"><?php echo $openT; ?></div>
+                      <div class="text-xs font-weight-bold text-uppercase mb-1">ALL TICKETS</div>
+                      <div class="h5 mb-0 font-weight-bold text-gray-800"><?php echo $allT; ?></div>
                       <div class="mt-2 mb-0 text-muted text-xs">
-                        <span class="text-success mr-2"><i class="fa fa-arrow-up"></i> .</span>
-                        <span>.</span>
+                      <?php if($ticketper<100){ echo'<span class="text-danger mr-2"><i class="fas fa-arrow-down"></i>'. (100-$ticketper).'%</span>';} else {echo'<span class="text-success mr-2"><i class="fas fa-arrow-up"></i>'. ($ticketper).'%</span>';}?>
                       </div>
                     </div>
                     <div class="col-auto">
@@ -88,11 +87,11 @@ $myT = myT($agent);
                 <div class="card-body">
                   <div class="row no-gutters align-items-center">
                     <div class="col mr-2">
-                      <div class="text-xs font-weight-bold text-uppercase mb-1">MY TICKETS</div>
-                      <div class="h5 mb-0 font-weight-bold text-gray-800"><?php echo $myT; ?></div>
+                      <div class="text-xs font-weight-bold text-uppercase mb-1">OPEN TICKETS</div>
+                      <div class="h5 mb-0 font-weight-bold text-gray-800"><?php echo $openT; ?></div>
                       <div class="mt-2 mb-0 text-muted text-xs">
-                        <span class="text-success mr-2"><i class="fas fa-arrow-up"></i> .</span>
-                        <span>.</span>
+                        <span class="text-success mr-2"><i class="fas fa-arrow-up"></i> 9%</span>
+                        
                       </div>
                     </div>
                     <div class="col-auto">
@@ -103,22 +102,17 @@ $myT = myT($agent);
               </div>
             </div>
 
-
-
-           
-            
-
             <!-- Pending Requests Card Example -->
             <div class="col-xl-2 col-md-6 mb-4">
               <div class="card h-100">
                 <div class="card-body">
                   <div class="row no-gutters align-items-center">
                     <div class="col mr-2">
-                      <div class="text-xs font-weight-bold text-uppercase mb-1">NEW TICKETS</div>
+                      <div class="text-xs font-weight-bold text-uppercase mb-1">MY TICKETS</div>
                       <div class="h5 mb-0 font-weight-bold text-gray-800"><?php echo $myT; ?></div>
                       <div class="mt-2 mb-0 text-muted text-xs">
-                        <span class="text-success mr-2"><i class="fas fa-arrow-down"></i> .</span>
-                        <span>.</span>
+                        <span class="text-success mr-2"><i class="fas fa-arrow-down"></i> 18%</span>
+                        
                       </div>
                     </div>
                     <div class="col-auto">
@@ -135,11 +129,11 @@ $myT = myT($agent);
                 <div class="card-body">
                   <div class="row no-gutters align-items-center">
                     <div class="col mr-2">
-                      <div class="text-xs font-weight-bold text-uppercase mb-1">OVERDUE TICKETS</div>
-                      <div class="h5 mb-0 font-weight-bold text-gray-800"><?php echo 0; ?></div>
+                      <div class="text-xs font-weight-bold text-uppercase mb-1">ALL JOB CARDS</div>
+                      <div class="h5 mb-0 font-weight-bold text-gray-800"><?php echo $alljobs; ?></div>
                       <div class="mt-2 mb-0 text-muted text-xs">
-                        <span class="text-success mr-2"><i class="fas fa-arrow-down"></i>.</span>
-                        <span>.</span>
+                        <span class="text-success mr-2"><i class="fas fa-arrow-down"></i> 15%</span>
+                        
                       </div>
                     </div>
                     <div class="col-auto">
@@ -151,17 +145,17 @@ $myT = myT($agent);
             </div>
 
 
-             <!-- New User Card Example -->
-             <div class="col-xl-2 col-md-6 mb-4">
+            <!-- New User Card Example -->
+            <div class="col-xl-2 col-md-6 mb-4">
               <div class="card h-100">
                 <div class="card-body">
                   <div class="row no-gutters align-items-center">
                     <div class="col mr-2">
-                      <div class="text-xs font-weight-bold text-uppercase mb-1">RESOLVED TICKETS</div>
-                      <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800"><?php echo $closedT; ?></div>
+                      <div class="text-xs font-weight-bold text-uppercase mb-1">CLOSED JOBCARD</div>
+                      <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800"><?php echo $allCj; ?></div>
                       <div class="mt-2 mb-0 text-muted text-xs">
-                        <span class="text-success mr-2"><i class="fas fa-arrow-up"></i>.</span>
-                        <span>.</span>
+                        <span class="text-success mr-2"><i class="fas fa-arrow-up"></i> 5%</span>
+                        
                       </div>
                     </div>
                     <div class="col-auto">
@@ -172,17 +166,17 @@ $myT = myT($agent);
               </div>
             </div>
 
-             <!-- Pending Requests Card Example -->
-             <div class="col-xl-2 col-md-6 mb-4">
+            <!-- Pending Requests Card Example -->
+            <div class="col-xl-2 col-md-6 mb-4">
               <div class="card h-100">
                 <div class="card-body">
                   <div class="row no-gutters align-items-center">
                     <div class="col mr-2">
-                      <div class="text-xs font-weight-bold text-uppercase mb-1">TRANSFERED TICKETS</div>
-                      <div class="h5 mb-0 font-weight-bold text-gray-800"><?php echo 0; ?></div>
+                      <div class="text-xs font-weight-bold text-uppercase mb-1">MY JOBCARDS</div>
+                      <div class="h5 mb-0 font-weight-bold text-gray-800"><?php echo $allmyjobs; ?></div>
                       <div class="mt-2 mb-0 text-muted text-xs">
-                        <span class="text-success mr-2"><i class="fas fa-arrow-down"></i>.</span>
-                        <span>.</span>
+                        <span class="text-success mr-2"><i class="fas fa-arrow-down"></i> 9%</span> 
+                        
                       </div>
                     </div>
                     <div class="col-auto">
@@ -192,69 +186,67 @@ $myT = myT($agent);
                 </div>
               </div>
             </div>
-
-
             <!-- CARDS -->
             <div class="col-lg-12">
               <div class="card sm mb-4">
                 <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                  <h6 class="m-0 font-weight-bold text-primary">ACTIVITY BOARD  </h6>
+                  <h6 class="m-0 font-weight-bold text-primary">ACTIVITY BOARD </h6>
                 </div>
                 <div class="card-body">
                   <div class="row">
                     <div class="col-lg-3 mb-4">
-                    <A href = "cticket.php">
-                      <div class="card bg-gradient-primary text-white">
-                        <div class="card-body">
-                          CREATE A TICKET
-                          <div class="text-white-100 medium"> </div>
+                      <A href="aticket.php">
+                        <div class="card bg-gradient-primary text-white">
+                          <div class="card-body">
+                            CREATE A TICKET
+                            <div class="text-white-100 medium"> </div>
+                          </div>
                         </div>
-                      </div>
                       </a>
                     </div>
                     <div class="col-lg-3 mb-4">
-                    <A href = "acustomer.php">
-                      <div class="card bg-gradient-info text-white">
-                        <div class="card-body">
-                          ADD A CUSTOMER
-                          <div class="text-white-100 medium"> </div>
+                      <a href="newjobCard.php">
+                        <div class="card bg-gradient-info text-white">
+                          <div class="card-body">
+                          CREATE A JOB CARD
+                            <div class="text-white-100 medium"> </div>
+                          </div>
                         </div>
-                      </div>
                       </a>
                     </div>
                     <div class="col-lg-3 mb-4">
-                    <A href = "trt.php">
-                      <div class="card bg-gradient-danger text-white">
-                        <div class="card-body">
-                          TRANSFER A TICKET
-                          <div class="text-white-100 medium"> </div>
+                      <A href="acustomer.php">
+                        <div class="card bg-gradient-danger text-white">
+                          <div class="card-body">
+                            ADD A CUSTOMER
+                            <div class="text-white-100 medium"> </div>
+                          </div>
                         </div>
-                      </div>
                       </a>
                     </div>
                     <div class="col-lg-3 mb-4">
-                    <A href = "mTiket.php">
-                      <div class="card bg-gradient-success text-white">
-                        <div class="card-body">
-                          MY TICKETS
-                          <div class="text-white-100 medium"></div>
+                      <A href="aleads.php">
+                        <div class="card bg-gradient-success text-white">
+                          <div class="card-body">
+                            ADD A LEAD
+                            <div class="text-white-100 medium"></div>
+                          </div>
                         </div>
-                      </div>
                       </a>
                     </div>
-                    
-                    
-                    </div>
+
+
                   </div>
                 </div>
               </div>
             </div>
-
           </div>
 
-            <!--END OF CARDS -->
+        </div>
 
-            <!-- Area Chart --
+        <!--END OF CARDS -->
+
+        <!-- Area Chart --
             <div class="col-xl-8 col-lg-7">
               <div class="card mb-4">
                 <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
@@ -281,7 +273,7 @@ $myT = myT($agent);
                 </div>
               </div>
             </div> -->
-            <!-- Pie Chart --
+        <!-- Pie Chart --
             <div class="col-xl-4 col-lg-5">
               <div class="card mb-4">
                 <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
@@ -354,51 +346,45 @@ $myT = myT($agent);
                 </div>
               </div>
             </div> -->
-            <!-- Invoice Example -->
-          <div class="col-lg-12 d-flex flex-row align-items-center justify-content-between">
-            <div class="col-xl-12 col-lg-12 mb-4">
-              <div class="card">
-                <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                  <h6 class="m-0 font-weight-bold text-primary">MY LATEST TICKETS</h6>
-                  <a class="m-0 float-right btn btn-danger btn-sm" href="mTiket.php">View More <i
-                      class="fas fa-chevron-right"></i></a>
-                </div>
-                <div class="table-responsive">
+        <!-- Invoice Example -->
+        <div class="col-lg-12 d-flex flex-row align-items-center justify-content-between">
+          <div class="col-xl-12 col-lg-12 mb-4">
+            <div class="card">
+              <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                <h6 class="m-0 font-weight-bold text-primary">MY LATEST TICKETS</h6>
+                <a class="m-0 float-right btn btn-danger btn-sm" href="mytickets.php">View More <i class="fas fa-chevron-right"></i></a>
+              </div>
+              <div class="table-responsive">
                 <table class="table align-items-center table-flush">
-                    <thead class="thead-light">
+                  <thead class="thead-light">
                     <tr>
-                        <th>TICKETS ID</th>
-                        <th>CUSTOMER NAME</th>
-                        <th>DATE OF ISSUE</th>
-                        <th>TICKET STATUS</th>
-                        
-                      </tr>
-                    </thead>
-                    <tbody>
-                      
-                    <?php 
-                     foreach($data as $row){
-                            
+                      <th>TICKETS ID</th>
+                      <th>CUSTOMER NAME</th>
+                      <th>DATE OF ISSUE</th>
+                      <th>TICKET STATUS</th>
 
-                              
+                    </tr>
+                  </thead>
+                  <tbody>
+
+                    <?php
+                    foreach ($data as $row) {
                       print " <tr> ";
                       print "<td>" . $row['ticketNumber'] . "</td>";
-                      print "<td>" . $row['cusName']. "</td>";
-                      print "<td>" . $row['dateCreated']. "</td>";
-                      print "<td>" . $row['status']. "</td>";
-                      
-                      
-                  }
-                     
-                     ?>  
-                    </tbody>
-                  </table>
-                </div>
-                <div class="card-footer"></div>
+                      print "<td>" . $row['cusName'] . "</td>";
+                      print "<td>" . $row['dateCreated'] . "</td>";
+                      print "<td>" . $row['status'] . "</td>";
+                    }
+
+                    ?>
+                  </tbody>
+                </table>
               </div>
+              <div class="card-footer"></div>
             </div>
-            <!-- Message From Customer-->
-            <!-- <div class="col-xl-4 col-lg-4 ">
+          </div>
+          <!-- Message From Customer-->
+          <!-- <div class="col-xl-4 col-lg-4 ">
               <div class="card">
                 <div class="card-header py-4 bg-primary d-flex flex-row align-items-center justify-content-between">
                   <h6 class="m-0 font-weight-bold text-light">NOTIFICATIONS</h6>
@@ -451,8 +437,7 @@ $myT = myT($agent);
           </div> -->
 
           <!-- Modal Logout -->
-          <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabelLogout"
-            aria-hidden="true">
+          <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabelLogout" aria-hidden="true">
             <div class="modal-dialog" role="document">
               <div class="modal-content">
                 <div class="modal-header">
@@ -479,7 +464,9 @@ $myT = myT($agent);
       <footer class="sticky-footer bg-white">
         <div class="container my-auto">
           <div class="copyright text-center my-auto">
-            <span>copyright &copy; <script> document.write(new Date().getFullYear()); </script> - developed by
+            <span>copyright &copy; <script>
+                document.write(new Date().getFullYear());
+              </script> - developed by
               <b><a href="" target="_blank">Dejavu Technologies</a></b>
             </span>
           </div>
@@ -499,7 +486,7 @@ $myT = myT($agent);
   <script src="vendor/jquery-easing/jquery.easing.min.js"></script>
   <script src="js/ruang-admin.min.js"></script>
   <script src="vendor/chart.js/Chart.min.js"></script>
-  <script src="js/demo/chart-area-demo.js"></script>  
+  <script src="js/demo/chart-area-demo.js"></script>
 </body>
 
 </html>

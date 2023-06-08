@@ -7,25 +7,26 @@ session_start();
 access();
 $db = getConnection();
 $succcess = null;
-
-$existingCust = [];
-
-if (isset($_POST['searchQ'])) {
-  $sq = $_POST['searchQ'];
-
-  $db = getConnection();
-  $query = "SELECT * FROM `customers` WHERE `idNo` = '$sq' OR `pin` = '$sq' OR `email`= '$sq'";
-  $res = mysqli_query($db, $query);
-  $existingCust = mysqli_fetch_assoc($res);
-
-  if (count($existingCust) > 0) {
-    $_SESSION['isExisting'] = true;
-  } else {
-    $existingCust = null;
-  }
-}
-if (isset($_POST['addTicket'])) {
-  regcomplain();
+if(isset($_REQUEST['id'])){
+  $db =  getConnection();   
+   $id = $_REQUEST['id'];   
+  $query1 = "SELECT * FROM `insidence` WHERE `id`= $id";
+  $subject1 = mysqli_query($db,$query1);
+  $subject = mysqli_fetch_assoc($subject1);
+  $ticktno=$subject['ticketNumber'];
+  $customer=$subject['cusName'];
+  $mobilenum=$subject['mobileNumber'];
+  $businame=$subject['businessName'];
+  $serialnum=$subject['serialNumber'];
+  $sourcetype=$subject['source'];
+  $devicestatus=$subject['dStatus'];
+  $priority=$subject['priority'];
+  $assigned=$subject['AssignedTo'];
+  $ticktdesc=$subject['complain'];
+  $ticktresolve=$subject['status'];
+ 
+if (isset($_POST['updateTicket'])) {
+  updatecomplain($id);
   unset($_SESSION['isExisting']);
   unset($_POST['searchQ']);
 }
@@ -34,6 +35,7 @@ if (isset($_SESSION['iaddition'])) {
 
   unset($_SESSION['iaddition']);
 }
+} 
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -69,11 +71,11 @@ if (isset($_SESSION['iaddition'])) {
         <!-- Container Fluid-->
         <div class="container-fluid" id="container-wrapper">
           <div class="d-sm-flex align-items-center justify-content-between mb-4">
-            <h1 class="h3 mb-0 text-gray-800">Add Ticket</h1>
+            <h1 class="h3 mb-0 text-gray-800">Update Ticket</h1>
             <ol class="breadcrumb">
               <li class="breadcrumb-item"><a href="./">Home</a></li>
               <li class="breadcrumb-item">Tickets</li>
-              <li class="breadcrumb-item active" aria-current="page">Add Ticket</li>
+              <li class="breadcrumb-item active" aria-current="page">update Ticket</li>
             </ol>
           </div>
 
@@ -101,7 +103,7 @@ if (isset($_SESSION['iaddition'])) {
 
             echo '<script>
                   setTimeout(()=>{
-                    window.open("/crm/admin/cticket.php", "_self");
+                    window.open("/crm/main/mytickets.php", "_self");
                   }, 500)
                  
                  </script>';
@@ -111,7 +113,7 @@ if (isset($_SESSION['iaddition'])) {
           <div class="card col-xl-12 col-md-12 mb-4 p-5">
             <form method="POST">
               <div>
-                <h2 class="h3 mb-0 text-gray-800">Add Ticket</h2>
+                <h2 class="h3 mb-0 text-gray-800">Update Ticket <?php echo $ticktno;?></h2>
               </div>
             </form>
             <hr>
@@ -120,13 +122,13 @@ if (isset($_SESSION['iaddition'])) {
                 <div class="col">
                   <div class="form-group">
                     <label>CUSTOMER NAME</label>
-                    <input type="text" class="form-control" id="exampleInputFirstName" placeholder="Customer Name" name="cusName" value="<?php if ($existingCust) echo $existingCust['pin']; ?>">
+                    <input type="text" class="form-control" id="exampleInputFirstName" name="cusName" value="<?php  echo $customer; ?>">
                   </div>
                 </div>
                 <div class="col">
                   <div class="form-group">
                     <label>MOBILE NUMBER</label>
-                    <input type="text" class="form-control" id="exampleInputEmail" pattern="[0-9]{10,12}" placeholder="Mobile Number" name="mobileNumber" required value="<?php if ($existingCust) echo $existingCust['tell']; ?>">
+                    <input type="text" class="form-control" id="exampleInputEmail" pattern="[0-9]{10,12}" placeholder="Mobile Number" name="mobileNumber" required value="<?php echo $mobilenum; ?>">
                   </div>
                 </div>
               </div>
@@ -134,13 +136,13 @@ if (isset($_SESSION['iaddition'])) {
                 <div class="col">
                   <div class="form-group">
                     <label>BUSINESS NAME</label>
-                    <input type="text" class="form-control" id="exampleInputLastName" placeholder="Business Name" name="businessName" value="<?php if ($existingCust) echo $existingCust['firstName']; ?>">
+                    <input type="text" class="form-control" id="exampleInputLastName" placeholder="Business Name" name="businessName" value="<?php echo $businame; ?>">
                   </div>
                 </div>
                 <div class="col">
                   <div class="form-group">
                     <label>SERIAL NUMBER</label>
-                    <input type="text" class="form-control" id="exampleInputPassword" placeholder="Device Serial Number" name="serialNumber" required value="<?php if ($existingCust) echo $existingCust['lastName']; ?>">
+                    <input type="text" class="form-control" id="exampleInputPassword" placeholder="Device Serial Number" name="serialNumber" required value="<?php  echo $serialnum; ?>">
                   </div>
                 </div>
               </div>
@@ -150,7 +152,7 @@ if (isset($_SESSION['iaddition'])) {
                   <div class="form-group">
                     <label class="label label-danger">SOURCE TYPE</label>
                     <select name="source" class="form-control" id="exampleInputPassword">
-                      <option>Select</option>
+                      <option selected value="<?php echo $sourcetype; ?>"><?php echo $sourcetype; ?></option>
                       <option value="TELEPHONE">TELEPHONE</option>
                       <option value="WALK IN">WALK IN</option>
                     </select>
@@ -160,7 +162,7 @@ if (isset($_SESSION['iaddition'])) {
                   <div class="form-group">
                     <label class="label label-danger">DEVICE STATUS</label>
                     <select name="dStatus" class="form-control" id="exampleInputPassword">
-                      <option>Select</option>
+                    <option selected value="<?php echo $devicestatus; ?>"><?php echo $devicestatus; ?></option>
                       <option value="BOOKED IN">BOOKED IN</option>
                       <option value="NOT BOOKED IN">NOT BOOKED IN</option>
                     </select>
@@ -172,7 +174,7 @@ if (isset($_SESSION['iaddition'])) {
                   <div class="form-group">
                     <label class="label label-danger">PRIORITY</label>
                     <select name="priority" class="form-control" id="exampleInputPassword">
-                      <option>Select</option>
+                    <option selected value="<?php echo $priority; ?>"><?php echo $priority; ?></option>
                       <option value="HIGH">HIGH</option>
                       <option value="MEDIUM">MEDIUM</option>
                       <option value="LOW">LOW</option>
@@ -184,7 +186,7 @@ if (isset($_SESSION['iaddition'])) {
                   <div class="form-group">
                     <label class="label label-danger">ASSIGNED</label>
                     <select name="assigned" class="form-control" id="exampleInputPassword">
-                      <option>Select</option>
+                    <option selected value="<?php echo $assigned; ?>"><?php echo $assigned; ?></option>
                       <?php
                       $query = "SELECT * FROM `users`";
                       $result = mysqli_query($db, $query);
@@ -200,14 +202,14 @@ if (isset($_SESSION['iaddition'])) {
                 <div class="col-10">
                   <div class="form-group">
                     <label>TICKET DESCRIPTION</label>
-                    <textarea type="text" class="form-control" id="exampleInputPasswordRepeat" name="complain" rows="3" required></textarea>
+                    <textarea type="text" class="form-control" id="exampleInputPasswordRepeat" name="complain" rows="3" required><?php echo  $ticktdesc; ?></textarea>
                   </div>
                 </div>
                 <div class="col-2">
                   <div class="form-group">
                     <label>TICKET RESEOLVED</label>
                     <select name="resolved" class="form-control" id="exampleInputPassword" required>
-                      <option selected></option>
+                    <option selected value="<?php echo $ticktresolve;?>"><?php echo $ticktresolve; ?></option>
                       <option value="OPEN" >OPEN</option>
                       <option value="CLOSED">CLOSED</option>
                     </select>
@@ -215,7 +217,7 @@ if (isset($_SESSION['iaddition'])) {
                 </div>
               </div>
               <div class="form-group">
-                <button type="submit" class="btn btn-success btn-block" name="addTicket">ADD TICKET</button>
+                <button type="submit" class="btn btn-danger btn-block" name="updateTicket">UPDATE TICKET</button>
               </div>
               <hr>
             </form>

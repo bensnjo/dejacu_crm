@@ -18,7 +18,6 @@ return $no;
 
 function openT($agent = null){
     $db = getConnection();
-    
     $query= "SELECT COUNT(*) as count FROM `insidence` WHERE `status` = 'OPEN' ";
     if($agent){
         $query = "SELECT COUNT(*) as count FROM `insidence` WHERE `status` = 'OPEN' AND createdBy = '$agent'";
@@ -28,6 +27,61 @@ function openT($agent = null){
 return $no;
 }
 
+function AllT(){
+    $db = getConnection();
+    $query= "SELECT COUNT(*) as count FROM `insidence`";
+    $result = mysqli_query($db, $query);
+    $no=mysqli_fetch_assoc($result)['count'];
+return $no;
+}
+
+function perctT(){
+    $db = getConnection();
+    $month = date("m");
+    $date = date("d"); // Today's date
+    $year = date("Y"); 
+    $d = date("Y-m-d");
+    //$yesterday=date('Y-m-d', mktime(0,0,0,$month,($date-1),$year)); 
+    $query= "SELECT COUNT(*) as count FROM `insidence` WHERE DATE(`dateCreated`) = (SELECT MAX(DATE(`dateCreated`)) FROM `insidence` WHERE DATE(`dateCreated`) < CURDATE())";
+    $result = mysqli_query($db, $query);
+    $no1=intval(mysqli_fetch_assoc($result)['count']);
+    //echo $no1;
+    $query2= "SELECT COUNT(*) as count FROM `insidence` WHERE DATE(`dateCreated`)= CURDATE()";
+    $result2 = mysqli_query($db, $query2);
+    $no2=intval(mysqli_fetch_assoc($result2)['count']);
+    if($no2<=0){
+        return intval(100);
+        }
+       else{
+        return number_format(floatval(($no2/$no1)*100), 2, '.', '') ;
+    }     
+    }
+
+function AllJ(){
+    $db = getConnection();
+    $query= "SELECT COUNT(*) as count FROM `jobcards`";
+    $result = mysqli_query($db, $query);
+    $no=mysqli_fetch_assoc($result)['count'];
+return $no;
+}
+
+function AllclosedJ(){
+    $db = getConnection();
+    $query= "SELECT COUNT(*) as count FROM `jobcards`WHERE `status`=0";
+    $result = mysqli_query($db, $query);
+    $no=mysqli_fetch_assoc($result)['count'];
+return $no;
+}
+function AllMyJ($user){
+    $db = getConnection();
+    $queryagent= "SELECT `full_names` FROM `users` WHERE `username` = '$user'";
+    $resultagent = mysqli_query($db, $queryagent);
+    $agentname=mysqli_fetch_assoc($resultagent)['full_names'];
+    $query= "SELECT COUNT(*) as count FROM `jobcards`WHERE `techn`='$agentname' OR`createdBy`='$user'";
+    $result = mysqli_query($db, $query);
+    $no=mysqli_fetch_assoc($result)['count'];
+return $no;
+}
 
 function closedT($user){
     $db = getConnection();
@@ -47,10 +101,11 @@ return $no;
 
 function myT($agent){
     $db = getConnection();
-    
-    $query= "SELECT COUNT(*) as count FROM `insidence` WHERE `status` = 'Active' AND `createdBy` = '$agent'";
+    $queryagent= "SELECT `full_names` FROM `users` WHERE `username` = '$agent'";
+    $resultagent = mysqli_query($db, $queryagent);
+    $agentname=mysqli_fetch_assoc($resultagent)['full_names'];
+    $query= "SELECT COUNT(*) as count FROM `insidence` WHERE `AssignedTo`='$agentname' OR `createdBy` = '$agent'";
     $result = mysqli_query($db, $query);
-
     $no=mysqli_fetch_assoc($result)['count'];
 
 return $no;
@@ -125,7 +180,14 @@ return $no;
     return $no;
         
     }
-
+    function getAgentTicketz($agent)
+    {
+        $db = getConnection();
+        $query = "SELECT * FROM insidence WHERE createdBy = '$agent' ORDER BY id DESC LIMIT 3 ";
+        $result = mysqli_query($db, $query);
+        return $result;
+    }
+    
 
  function summary($agent){
      $db = getConnection();
@@ -147,6 +209,3 @@ return $no;
   $result =   mysqli_query($db, $query );
   return $result;
  }
-
-
-?>

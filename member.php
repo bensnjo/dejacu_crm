@@ -158,6 +158,52 @@ function regcomplain()
     //
 
 }
+function updatecomplain($id)
+{
+    $db = getConnection();
+    $ticketNo = generateNo();
+    $_SESSION['ticketNo'] = $ticketNo;
+    $cusName = mysqli_real_escape_string($db, $_POST['cusName']);
+    $mobileNumber = mysqli_real_escape_string($db, $_POST['mobileNumber']);
+    $businessName = mysqli_real_escape_string($db, $_POST['businessName']);
+    $serialNumber = mysqli_real_escape_string($db, $_POST['serialNumber']);
+    $source = mysqli_real_escape_string($db, $_POST['source']);
+    $resolved = mysqli_real_escape_string($db, $_POST['resolved']);
+    $dStatus = mysqli_real_escape_string($db, $_POST['dStatus']);
+    $priority = mysqli_real_escape_string($db, $_POST['priority']);
+    $complain = mysqli_real_escape_string($db, $_POST['complain']);
+    $assignedto = mysqli_real_escape_string($db, $_POST['assigned']);
+    $user = $_SESSION['username'];
+    $ip = getip();
+    $t = time();
+    $d = date("Y-m-d G:i", $t);
+
+     if($resolved=="CLOSED"){
+        $status = "CLOSED";
+        $query = "UPDATE `insidence` SET `cusName`='$cusName',`mobileNumber`='$mobileNumber',`businessName`='$businessName',
+        `serialNumber`='$serialNumber',`source`='$source',`dStatus`='$dStatus',`priority`='$priority',
+        `complain`='$complain',`status`='$status',`AssignedTo`='$assignedto' WHERE `id`='$id'";
+        mysqli_query($db, $query);
+    }
+    else{
+        $status = "OPEN";
+        $resolvedat=null;
+        $resolvedby='';
+        $query1 = "UPDATE `insidence` SET `cusName`='$cusName',`mobileNumber`='$mobileNumber',`businessName`='$businessName',
+        `serialNumber`='$serialNumber',`source`='$source',`dStatus`='$dStatus',`priority`='$priority',
+        `complain`='$complain',`status`='$status',`AssignedTo`='$assignedto',`resolvedAt`='$resolvedat',`resolvedby`='$resolvedby' WHERE `id`='$id'";
+        mysqli_query($db, $query1); 
+    }
+    //send sms
+
+    $_SESSION['iaddition'] = "Ticket " . $ticketNo . " updated successfully ";
+    //
+    $audit = "INSERT INTO audit_trail (username, time_stamp, `action`, results, impact, ip_address)
+         VALUES('$user','$d', 'update_ticket', 'success', '$ticketNo', '$ip')";
+    mysqli_query($db, $audit);
+    //
+}
+
 function regjobcard()
 {
     $db = getConnection();

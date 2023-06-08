@@ -3,33 +3,20 @@
 require_once($_SERVER['DOCUMENT_ROOT']."/crm/connection.php");
 require_once($_SERVER['DOCUMENT_ROOT']."/crm/access.php");
 session_start();
-
 access();
-
 if (isset($_POST['editPP'])){
     update();
 }
-
 $succcess = null;
-
 if(isset($_SESSION['successUp']) && $_SESSION['successUp'] == "Profile updated success"){
     $succcess = "Profile updated success";
-  
     unset($_SESSION['successUp']);
   }
-
 $user = getUser($_SESSION['username']);
-
-
-
 ?>
-
-
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -40,11 +27,8 @@ $user = getUser($_SESSION['username']);
   <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
   <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css">
   <link href="css/ruang-admin.min.css" rel="stylesheet">
-
 </head>
-
 <body class="bg-gradient-login">
-
 <div id="wrapper">
     <!-- Sidebar -->
     <?php
@@ -57,9 +41,6 @@ $user = getUser($_SESSION['username']);
         <?php
          include('topbar.php');
         ?>
-
-
-
   <!-- Register Content -->
   <div class="container-login">
     <div class="row justify-content-center">
@@ -70,12 +51,9 @@ $user = getUser($_SESSION['username']);
               <div class="col-lg-12">
                 <div class="login-form">
                   <div class="text-center">
- 
                    <hr>
-        
                     <h1 class="h4 text-gray-900 mb-4">Profile</h1>
                     <?php
-                   
                    if(count($errors)> 0){
                     echo '
                     <div class="alert alert-danger alert-dismissible" role="alert">

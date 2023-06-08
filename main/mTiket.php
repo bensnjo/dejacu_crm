@@ -108,7 +108,7 @@ $tickets = getAgentTiket($user);
                                 print "<td>" . $AssignedTo. "</td>";
                                 print "<td>" . $status. "</td>";
                                 print("<td>");
-                                print('<a " href="/crm/main/achild.php?id='.$row['id'].'"><i class="fa fa-edit"></i></a>');
+                                print('<a " href="/crm/main/editTicket.php?id='.$row['id'].'"><i class="fa fa-edit"></i></a>');
                                 print("</td>");
                                 print("<td>");
                                 print('<a " href="/crm/main/resolveTicket.php?id='.$row['id'].'"><i class="fa fa-check-square"></i></a>');

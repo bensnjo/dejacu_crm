@@ -1,14 +1,11 @@
 <?php
 
 function getConnection($connectionType="mysqli"){
-
     
     $database = "dejavute_crm";
     $username = "dejavute_crm";
     $password = "Password@2023";
     $hostname = "localhost";
-
-    $connection;
 
     if($connectionType == 'mysqli'){
         $connection = new mysqli($hostname, $username, $password, $database);
