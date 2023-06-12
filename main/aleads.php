@@ -91,7 +91,7 @@ if (isset($_POST['addlead'])) {
             echo '<script>
           setTimeout(()=>{
             window.open("/crm/main/vleads.php", "_self");
-          }, 2000)
+          }, 500)
          
          </script>';
           }

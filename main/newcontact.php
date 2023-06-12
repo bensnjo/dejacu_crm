@@ -102,7 +102,7 @@ if(isset($_SESSION['addition']) && $_SESSION['addition'] == "Contact added Succe
           echo'<script>
           setTimeout(()=>{
             window.open("/crm/main/viewgroup.php?id='.$groupid.'", "_self");
-          }, 1000)
+          }, 500)
          
          </script>';
 

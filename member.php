@@ -251,6 +251,31 @@ function regjobcard()
         mysqli_query($db, $audit);
     }
 }
+function updateJobcard($jobcardNo){
+    $db = getConnection();
+    $d = date("Y-m-d G:i");
+    $ip = getip();
+    //$cusName = mysqli_real_escape_string($db, $_POST['cusName']);
+   //$mobileNumber = mysqli_real_escape_string($db, $_POST['mobileNumber']);
+    $email = mysqli_real_escape_string($db, $_POST['email']);
+    $equipment = mysqli_real_escape_string($db, $_POST['equipment']);
+    $charger = mysqli_real_escape_string($db, $_POST['charger']);
+    $qty = mysqli_real_escape_string($db, $_POST['qty']);
+    $modelseq = mysqli_real_escape_string($db, $_POST['modelseq']);
+    $serialNumber = mysqli_real_escape_string($db, $_POST['serialNumber']);
+    $fault = mysqli_real_escape_string($db, $_POST['fault']);
+    //$technician = mysqli_real_escape_string($db, $_POST['technician']);
+    $user = $_SESSION['username'];
+    $query = "UPDATE `jobcards` SET `serialNumber`='$serialNumber',`email`='$email',`devicename`=' $equipment]',`charger`='$charger',
+    `qty`='$qty',`model`='$modelseq',`fault`='$fault',`work`='[value-13]' WHERE `jbcrdNum`='$jobcardNo'";
+    $result = mysqli_query($db, $query);
+    //sendSMSnew($cusnum, $msgtech);
+    $_SESSION['iaddition'] = "Jobcard".$jobcardNo." closed succcessfully";
+    $audit = "INSERT INTO audit_trail (username, time_stamp, `action`, results, impact, ip_address)
+    VALUES('$user','$d', 'update_jbc', 'success', '$jobcardNo', '$ip')";
+    mysqli_query($db, $audit);
+    return $result;
+}
 function closejobcard($jobNumber,$cusnum)
 {
     $db = getConnection();
@@ -271,6 +296,27 @@ function closejobcard($jobNumber,$cusnum)
     VALUES('$user','$d', 'close jbc', 'success', '$jobNumber', '$ip')";
     mysqli_query($db, $audit);
     return $result;
+}
+
+function issuemachine($jobNumber){
+    $db = getConnection();
+    $d = date("Y-m-d G:i");
+    $ip = getip();
+    $machinestatus = mysqli_real_escape_string($db, $_POST['issuedmachine']);
+    if( $machinestatus=="ISSUED"){
+        $status=1;
+        //$msgtech="Job card ".$jobNumber." has been closed. Thank you";
+        $user = $_SESSION['username'];
+    $query = "UPDATE `jobcards` SET `issued`='$status',`issuedby`='$user' WHERE `jbcrdNum`='$jobNumber'";
+    $result = mysqli_query($db, $query);
+    //sendSMSnew($cusnum, $msgtech);
+    }
+    $_SESSION['iaddition'] = "Machine issued succcessfully";
+    $audit = "INSERT INTO audit_trail (username, time_stamp, `action`, results, impact, ip_address)
+    VALUES('$user','$d', 'issue_machine', 'success', '$jobNumber', '$ip')";
+    mysqli_query($db, $audit);
+    return $result;
+
 }
 // MEMBER NO GENERATION
 function generateNo()
@@ -587,6 +633,14 @@ function getclosedjobcards()
     
     $db = getConnection();
     $query = "SELECT * FROM `jobcards` WHERE `status`=0";
+    $result = mysqli_query($db, $query);
+    return $result;
+}
+function getissuedjobcards()
+{
+    
+    $db = getConnection();
+    $query = "SELECT * FROM `jobcards` WHERE `issued`=1 order by id asc";
     $result = mysqli_query($db, $query);
     return $result;
 }

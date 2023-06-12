@@ -101,7 +101,7 @@ $jobcards =  getmyjobcards($agent);
                                 print "<td>" . $device. "</td>";
                                 print "<td>" . $status. "</td>";
                                 print("<td>");
-                                print('<a " href="/crm/main/jBoard.php?jobcardNo='.$jobcardno.'"><i class="fa fa-eye"></i></a>');
+                                print('<a " href="/crm/main/jBoardm.php?jobcardNo='.$jobcardno.'"><i class="fa fa-eye"></i></a>');
                                 print("</td>");
                                 print("<td>");
                                 print('<a " href="/crm/main/closejbc.php?jobcardNo='.$jobcardno.'"><i class="fa fa-cog"></i></a>');

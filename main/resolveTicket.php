@@ -114,7 +114,7 @@ $d = date("Y-m-d G:i:s",$t);
           echo'<script>
           setTimeout(()=>{
             window.open("/crm/main/cticket.php", "_self");
-          }, 2000)
+          }, 500)
          
          </script>';
 

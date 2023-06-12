@@ -34,7 +34,38 @@ function AllT(){
     $no=mysqli_fetch_assoc($result)['count'];
 return $no;
 }
+function perctmyt($agent){
+    $db = getConnection();
+    $query= "SELECT COUNT(*) as count FROM `insidence` WHERE `status`='OPEN' AND DATE(`dateCreated`) = (SELECT MAX(DATE(`dateCreated`)) FROM `insidence` WHERE DATE(`dateCreated`) < CURDATE())";
+    $result = mysqli_query($db, $query);
+    $no1=intval(mysqli_fetch_assoc($result)['count']);
+    $query2= "SELECT COUNT(*) as count FROM `insidence` WHERE `status`='OPEN' AND DATE(`dateCreated`)= CURDATE()";
+    $result2 = mysqli_query($db, $query2);
+    $no2=intval(mysqli_fetch_assoc($result2)['count']);
+    if($no2<=0){
+        return intval(0);
+        }
+       else{
+        return number_format(floatval(($no2/$no1)*100), 2, '.', '') ;
+    }     
+    }
 
+function perctopent(){
+    $db = getConnection();
+    $query= "SELECT COUNT(*) as count FROM `insidence`";
+    $result = mysqli_query($db, $query);
+    $no1=intval(mysqli_fetch_assoc($result)['count']);
+    $query2= "SELECT COUNT(*) as count FROM `insidence` WHERE `status`='OPEN'";
+    $result2 = mysqli_query($db, $query2);
+    $no2=intval(mysqli_fetch_assoc($result2)['count']);
+    if($no2<=0){
+        return intval(0);
+        }
+       else{
+        return number_format(floatval(($no2/$no1)*100), 2, '.', '') ;
+    }     
+    }
+//percent of ticket increase
 function perctT(){
     $db = getConnection();
     $month = date("m");
@@ -50,13 +81,86 @@ function perctT(){
     $result2 = mysqli_query($db, $query2);
     $no2=intval(mysqli_fetch_assoc($result2)['count']);
     if($no2<=0){
-        return intval(100);
+        return intval(0);
         }
        else{
         return number_format(floatval(($no2/$no1)*100), 2, '.', '') ;
     }     
     }
-
+    //percent of my ticket increase
+function perctmyTickets($agent){
+    $db = getConnection();
+    $month = date("m");
+    $date = date("d"); // Today's date
+    $year = date("Y"); 
+    $d = date("Y-m-d");
+    //$yesterday=date('Y-m-d', mktime(0,0,0,$month,($date-1),$year)); 
+    $query= "SELECT COUNT(*) as count FROM `insidence` WHERE `createdBy`='$agent' AND DATE(`dateCreated`) = (SELECT MAX(DATE(`dateCreated`)) FROM `insidence` WHERE DATE(`dateCreated`) < CURDATE())";
+    $result = mysqli_query($db, $query);
+    $no1=intval(mysqli_fetch_assoc($result)['count']);
+    //echo $no1;
+    $query2= "SELECT COUNT(*) as count FROM `insidence` WHERE `createdBy`='$agent' AND DATE(`dateCreated`)= CURDATE()";
+    $result2 = mysqli_query($db, $query2);
+    $no2=intval(mysqli_fetch_assoc($result2)['count']);
+    if($no2<=0){
+        return intval(0);
+        }
+       else{
+        return number_format(floatval(($no2/$no1)*100), 2, '.', '') ;
+    }     
+    }
+    //percent job cards increase/decrease
+    function perctjobcards(){
+        $db = getConnection();
+        $query= "SELECT COUNT(*) as count FROM  `jobcards` WHERE DATE(`dateCreated`) = (SELECT MAX(DATE(`dateCreated`)) FROM  `jobcards` WHERE DATE(`dateCreated`) < CURDATE())";
+        $result = mysqli_query($db, $query);
+        $no1=intval(mysqli_fetch_assoc($result)['count']);
+        //echo $no1;
+        $query2= "SELECT COUNT(*) as count FROM  `jobcards` WHERE DATE(`dateCreated`)= CURDATE()";
+        $result2 = mysqli_query($db, $query2);
+        $no2=intval(mysqli_fetch_assoc($result2)['count']);
+        if($no2<=0){
+            return intval(0);
+            }
+           else{
+            return number_format(floatval(($no2/$no1)*100), 2, '.', '') ;
+        }     
+        }
+        //percent my job cards increase/decrease
+    function perctmyjobcards(){
+        $db = getConnection();
+        $query= "SELECT COUNT(*) as count FROM  `jobcards` WHERE DATE(`dateCreated`) = (SELECT MAX(DATE(`dateCreated`)) FROM  `jobcards` WHERE DATE(`dateCreated`) < CURDATE())";
+        $result = mysqli_query($db, $query);
+        $no1=intval(mysqli_fetch_assoc($result)['count']);
+        //echo $no1;
+        $query2= "SELECT COUNT(*) as count FROM  `jobcards` WHERE DATE(`dateCreated`)= CURDATE()";
+        $result2 = mysqli_query($db, $query2);
+        $no2=intval(mysqli_fetch_assoc($result2)['count']);
+        if($no2<=0){
+            return intval(0);
+            }
+           else{
+            return number_format(floatval(($no2/$no1)*100), 2, '.', '') ;
+        }     
+        }
+    //all open job cards
+    function perctOJB(){
+        $db = getConnection();
+         
+        $query= "SELECT COUNT(*) as count FROM `jobcards` WHERE `status`=1";
+        $result = mysqli_query($db, $query);
+        $no1=intval(mysqli_fetch_assoc($result)['count']);
+        //echo $no1;
+        $query2= "SELECT COUNT(*) as count FROM `jobcards`";
+        $result2 = mysqli_query($db, $query2);
+        $no2=intval(mysqli_fetch_assoc($result2)['count']);
+        if($no2<=0){
+            return intval(0);
+            }
+           else{
+            return number_format(floatval(($no1/$no2)*100), 2, '.', '') ;
+        }     
+        }
 function AllJ(){
     $db = getConnection();
     $query= "SELECT COUNT(*) as count FROM `jobcards`";
@@ -65,9 +169,9 @@ function AllJ(){
 return $no;
 }
 
-function AllclosedJ(){
+function AllopenJ(){
     $db = getConnection();
-    $query= "SELECT COUNT(*) as count FROM `jobcards`WHERE `status`=0";
+    $query= "SELECT COUNT(*) as count FROM `jobcards`WHERE `status`=1";
     $result = mysqli_query($db, $query);
     $no=mysqli_fetch_assoc($result)['count'];
 return $no;

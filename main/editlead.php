@@ -112,7 +112,7 @@ if (isset($_SESSION['addition']) && $_SESSION['addition'] == "Lead updated Succe
             echo '<script>
           setTimeout(()=>{
             window.open("/crm/main/vleads.php", "_self");
-          }, 2000)
+          }, 500)
          
          </script>';
           }

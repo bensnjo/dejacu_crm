@@ -10,13 +10,19 @@ $agent = $_SESSION['username'];
 $data = getAgentTicketz($agent);
 $alljobs=AllJ();
 $allmyjobs=AllMyJ($agent);
-$allCj=AllclosedJ();
+$percentjobcards=perctjobcards();
+$allopenjb=perctOJB();
+$alloj=AllopenJ();
+$percentallmyjb=perctmyjobcards();
 $noOfTickets = noOfTickets();
 $allT = AllT();
 $closedT = closedT($agent);
 $openT = openT();
 $myT = myT($agent);
+
+$myticketp=perctmyTickets($agent);
 $ticketper= perctT();
+$openTp=perctopent();
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -69,7 +75,7 @@ $ticketper= perctT();
                       <div class="text-xs font-weight-bold text-uppercase mb-1">ALL TICKETS</div>
                       <div class="h5 mb-0 font-weight-bold text-gray-800"><?php echo $allT; ?></div>
                       <div class="mt-2 mb-0 text-muted text-xs">
-                      <?php if($ticketper<100){ echo'<span class="text-danger mr-2"><i class="fas fa-arrow-down"></i>'. (100-$ticketper).'%</span>';} else {echo'<span class="text-success mr-2"><i class="fas fa-arrow-up"></i>'. ($ticketper).'%</span>';}?>
+                      <?php if($ticketper<=100){ echo'<span class="text-danger mr-2"><i class="fas fa-arrow-down"></i>'. ($ticketper).'%</span>';} else {echo'<span class="text-success mr-2"><i class="fas fa-arrow-up"></i>'. ($ticketper).'%</span>';}?>
                       </div>
                     </div>
                     <div class="col-auto">
@@ -90,8 +96,7 @@ $ticketper= perctT();
                       <div class="text-xs font-weight-bold text-uppercase mb-1">OPEN TICKETS</div>
                       <div class="h5 mb-0 font-weight-bold text-gray-800"><?php echo $openT; ?></div>
                       <div class="mt-2 mb-0 text-muted text-xs">
-                        <span class="text-success mr-2"><i class="fas fa-arrow-up"></i> 9%</span>
-                        
+                      <?php if($openTp){ echo'<span class="text-primary mr-2"><i class="fas fa-circle"></i>' .($openTp).'%</span>';}?>
                       </div>
                     </div>
                     <div class="col-auto">
@@ -111,8 +116,8 @@ $ticketper= perctT();
                       <div class="text-xs font-weight-bold text-uppercase mb-1">MY TICKETS</div>
                       <div class="h5 mb-0 font-weight-bold text-gray-800"><?php echo $myT; ?></div>
                       <div class="mt-2 mb-0 text-muted text-xs">
-                        <span class="text-success mr-2"><i class="fas fa-arrow-down"></i> 18%</span>
-                        
+                      <?php if($myticketp<=100){ echo'<span class="text-danger mr-2"><i class="fas fa-arrow-down"></i>'. ($myticketp).'%</span>';} else {echo'<span class="text-success mr-2"><i class="fas fa-arrow-up"></i>'. ($myticketp).'%</span>';}?>
+                     
                       </div>
                     </div>
                     <div class="col-auto">
@@ -132,8 +137,8 @@ $ticketper= perctT();
                       <div class="text-xs font-weight-bold text-uppercase mb-1">ALL JOB CARDS</div>
                       <div class="h5 mb-0 font-weight-bold text-gray-800"><?php echo $alljobs; ?></div>
                       <div class="mt-2 mb-0 text-muted text-xs">
-                        <span class="text-success mr-2"><i class="fas fa-arrow-down"></i> 15%</span>
-                        
+                      <?php if($percentjobcards<=100){ echo'<span class="text-danger mr-2"><i class="fas fa-arrow-down"></i>'. ($percentjobcards).'%</span>';} else {echo'<span class="text-success mr-2"><i class="fas fa-arrow-up"></i>'. ($percentjobcards).'%</span>';}?>
+                     
                       </div>
                     </div>
                     <div class="col-auto">
@@ -151,10 +156,11 @@ $ticketper= perctT();
                 <div class="card-body">
                   <div class="row no-gutters align-items-center">
                     <div class="col mr-2">
-                      <div class="text-xs font-weight-bold text-uppercase mb-1">CLOSED JOBCARD</div>
-                      <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800"><?php echo $allCj; ?></div>
+                      <div class="text-xs font-weight-bold text-uppercase mb-1">OPEN JOBCARD</div>
+                      <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800"><?php echo $alloj; ?></div>
                       <div class="mt-2 mb-0 text-muted text-xs">
-                        <span class="text-success mr-2"><i class="fas fa-arrow-up"></i> 5%</span>
+                      <?php if($allopenjb){ echo'<span class="text-primary mr-2"><i class="fas fa-circle"></i>'. ($allopenjb).'%</span>';}?>
+                     
                         
                       </div>
                     </div>
@@ -175,8 +181,8 @@ $ticketper= perctT();
                       <div class="text-xs font-weight-bold text-uppercase mb-1">MY JOBCARDS</div>
                       <div class="h5 mb-0 font-weight-bold text-gray-800"><?php echo $allmyjobs; ?></div>
                       <div class="mt-2 mb-0 text-muted text-xs">
-                        <span class="text-success mr-2"><i class="fas fa-arrow-down"></i> 9%</span> 
-                        
+                        <?php if($percentallmyjb<=100){ echo'<span class="text-danger mr-2"><i class="fas fa-arrow-down"></i>'. ($percentallmyjb).'%</span>';} else {echo'<span class="text-success mr-2"><i class="fas fa-arrow-up"></i>'. ($percentallmyjb).'%</span>';}?>
+                      
                       </div>
                     </div>
                     <div class="col-auto">

@@ -101,7 +101,7 @@ unset($_SESSION['addition']);
            echo '<script>
           setTimeout(()=>{
             window.open("/crm/main/emailrh.php", "_self");
-          }, 1000)
+          }, 500)
          </script>';
           }
           ?>

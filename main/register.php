@@ -97,7 +97,7 @@ if (isset($_POST['register'])){
                     echo'<script>
                   setTimeout(()=>{
                     window.open("/crm/main/editusers.php", "_self");
-                  }, 1000)
+                  }, 500)
                  
                  </script>';
                      }

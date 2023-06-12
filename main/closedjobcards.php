@@ -70,8 +70,8 @@ $jobcards =  getclosedjobcards();
                         <th>Contact</th>
                         <th>Device</th>
                         <th>Status</th>
-                        <th>OPT</th>
-                        <th>Close</th>
+                        <th>View</th>
+                        <th>Issue</th>
                       </tr>
                     </thead>
                    
@@ -101,10 +101,10 @@ $jobcards =  getclosedjobcards();
                                 print "<td>" . $device. "</td>";
                                 print "<td>" . $status. "</td>";
                                 print("<td>");
-                                print('<a " href="/crm/admin/jBoard.php?jobcardNo='.$jobcardno.'"><i class="fa fa-eye"></i></a>');
+                                print('<a " href="/crm/main/viewclosed.php?jobcardNo='.$jobcardno.'"><i class="fa fa-eye"></i></a>');
                                 print("</td>");
                                 print("<td>");
-                                print('<a " href="/crm/admin/closejbc.php?jobcardNo='.$jobcardno.'"><i class="fa fa-cog"></i></a>');
+                                print('<a " href="/crm/main/issueetr.php?jobcardNo='.$jobcardno.'"><i class="fa fa-cog"></i></a>');
                                 print("</td>");
                             
                                 

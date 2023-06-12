@@ -93,7 +93,7 @@ if (isset($_POST['add'])) {
             echo '<script>
           setTimeout(()=>{
             window.open("/crm/main/vcustomers.php", "_self");
-          }, 2000)
+          }, 500)
          
          </script>';
           }

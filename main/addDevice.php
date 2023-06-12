@@ -101,7 +101,7 @@ if(isset($_SESSION['addition']) && $_SESSION['addition'] == "Device added Succes
                     echo'<script>
                     setTimeout(()=> {
                       window.open("/crm/main/addDevice.php", "_self");
-                    }, 1000)
+                    }, 500)
                    
                    </script>';
                 }

@@ -5,13 +5,10 @@ require_once($_SERVER['DOCUMENT_ROOT']."/crm/access.php");
 session_start();
 
 access();
-
-$teams = allteams();
-
-
+$agent = $_SESSION['username'];
+$jobcards =  getissuedjobcards();
 
 ?>
-
 
 <!DOCTYPE html>
 <html lang="en">
@@ -23,7 +20,7 @@ $teams = allteams();
   <meta name="description" content="">
   <meta name="author" content="">
   <link href="img/devajuLogo.jpeg" rel="icon">
-  <title>Dejavu Teams</title>
+  <title>Dejavu Job cards</title>
   <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
   <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css">
   <link href="css/ruang-admin.min.css" rel="stylesheet">
@@ -47,84 +44,70 @@ $teams = allteams();
         <!-- Container Fluid-->
         <div class="container-fluid" id="container-wrapper">
           <div class="d-sm-flex align-items-center justify-content-between mb-4">
-            <h1 class="h3 mb-0 text-gray-800">Select a Team</h1>
+            <h1 class="h3 mb-0 text-gray-800">Dispatched Job Cards</h1>
             <ol class="breadcrumb">
               <li class="breadcrumb-item"><a href="./">Home</a></li>
-              <li class="breadcrumb-item">Tables</li>
-              <li class="breadcrumb-item active" aria-current="page">DataTables</li>
+              <li class="breadcrumb-item">Job Cards</li>
+              <li class="breadcrumb-item active" aria-current="page">Dispatched Job Cards</li>
             </ol>
           </div>
 
           <!-- PUT YOUR CODE HERE -->
-          <?php
-
-                        if (isset($_REQUEST['tname'])){
-
-                $db = getConnection();
-                $users = $_SESSION['username'];
-                $team = $_REQUEST['tname'];
-                $updateT = "UPDATE `users` SET `team`='$team' WHERE `username`= '$users' ";
-                mysqli_query($db, $updateT);
-
-                $massage = "Team selected Successfully ";
-
-                echo '
-                <div class="alert alert-success  alert-dismissible" role="alert">
-                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-                </button>
-                '.$massage.'
-                </div>
-                ';
-
-
-                echo'<script>
-                                    setTimeout(()=>{
-                                    window.open("/crm/main/index.php", "_self");
-                                    }, 500)
-                                
-                                </script>';
-                    
-                } ?>
-
              <!-- Datatables -->
              <div class="col-lg-12">
               <div class="card mb-4">
                 <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                  <h6 class="m-0 font-weight-bold text-primary">SELECT A TEAM</h6>
+                  <h6 class="m-0 font-weight-bold text-primary">DISPATCHED JOB CARDS</h6>
                 </div>
                 <div class="table-responsive p-3">
                   <table class="table align-items-center table-flush" id="dataTable">
-                    <thead class="thead-dark tfoot-dark">
+                    <thead class="">
                       <tr>
-                      <th>ID</th>
-                        <th>TEAM NAME</th>
-                        <th>DISCRIPTION</th>
-                        <th>SELECT</th>
+                        <th>No.</th>
+                        <th>Date</th>
+                        <th>Jobcard No</th>
+                        <th>Customer</th>
+                        <th>Contact</th>
+                        <th>Device</th>
+                        <th>S/n</th>
+                        <th>issued</th>
+                        <th>View</th>
+                        
+                        
                       </tr>
                     </thead>
-                    <tfoot>
-                      <tr>
-                      <th>ID</th>
-                        <th>TEAM NAME</th>
-                        <th>DISCRIPTION</th>
-                        <th>SELECT</th>
-                      </tr>
-                    </tfoot>
+                   
                     <tbody>
                          <?php
-
-                            foreach($teams as $row){
-                            
-
-                                
+                               $No=0;
+                            foreach($jobcards as $jobcard){
+                                $db = getConnection();
+                                $dateCreated =substr($jobcard['dateCreated'],0,-10);
+                                $jobcardno = $jobcard['jbcrdNum'];
+                                $CustomerName = $jobcard['customer'];
+                                $CustomerNum = $jobcard['phoneNumber'];
+                                $device = $jobcard['devicename'];
+                                $deserial=$jobcard['serialNumber'];
+                                $sStatus= $jobcard['issued'];
+                                if($sStatus==1){
+                                  $status="Y";
+                                }
+                                else{
+                                  $status="CLOSED";
+                                }
                                 print " <tr> ";
-                                print "<td>" . $row['id'] . "</td>";
-                                print "<td>" . $row['teamName'] . "</td>";
-                                print "<td>" . $row['discription']. "</td>";
+                                print "<td>" . ++$No. "</td>";
+                                print "<td>" . $dateCreated. "</td>";
+                                print "<td>" . $jobcardno. "</td>";
+                                print "<td>" . $CustomerName. "</td>";
+                                print "<td>" . $CustomerNum. "</td>";
+                                print "<td>" . $device. "</td>";
+                                print "<td>" . $deserial. "</td>";
+                                print "<td>" . $status. "</td>";
                                 print("<td>");
-                                print('<a class="btn btn-success" href="/crm/main/teams.php?tname='.$row['teamName'].'"><i class="fa fa-edit"></i></a>');
+                                print('<a " href="/crm/main/viewclosed.php?jobcardNo='.$jobcardno.'"><i class="fa fa-eye"></i></a>');
                                 print("</td>");
+                            
                                 
                             }
                         ?>
@@ -135,6 +118,8 @@ $teams = allteams();
                 </div>
               </div>
             </div>
+            <!-- DataTable with Hover -->
+
 
 
 

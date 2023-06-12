@@ -1,42 +1,49 @@
 <?php
-//require_once($_SERVER['DOCUMENT_ROOT']."/crm/connection.php");
-require_once($_SERVER['DOCUMENT_ROOT']."/crm/member.php");
 require_once($_SERVER['DOCUMENT_ROOT']."/crm/connection.php");
+require_once($_SERVER['DOCUMENT_ROOT']."/crm/member.php");
 require_once($_SERVER['DOCUMENT_ROOT']."/crm/access.php");
 session_start();
+
 access();
+
 $db = getConnection();
-$succcess = null;
+//$members = allTickets();
 
-$existingCust = [];
+if (isset($_REQUEST['jobcardNo'])){
+    
+  $db = getConnection();
+  $jobcardNo = $_REQUEST['jobcardNo'];
+  $query2 = "SELECT * FROM `jobcards` WHERE `jbcrdNum`='$jobcardNo'";
+  $result2 = mysqli_fetch_assoc(mysqli_query($db, $query2));
 
-if(isset($_POST['searchQ'])){
- $sq = $_POST['searchQ'];
+    $Datecreated = $result2['dateCreated'];
+    $jobNumber = $result2['jbcrdNum'];
+    $cusname = $result2['customer'];
+    $mobileNumber =  $result2['phoneNumber'];
+    $serialnum =  $result2['serialNumber'];
+    $email =  $result2['email'];
+    $device =  $result2['devicename'];
+    $charger =  $result2['charger'];
+    $qty =  $result2['qty'];
+    $model =  $result2['model'];
+    $fault =  $result2['fault'];
+    $work =  $result2['work'];
+    $tecn =  $result2['techn'];
+    $createdby= $result2['createdBy'];
+    $stats= $result2['status'];
+// 
 
- $db = getConnection();
- $query = "SELECT * FROM `customers` WHERE `idNo` = '$sq' OR `pin` = '$sq' OR `email`= '$sq'";
- $res = mysqli_query($db, $query);
- $existingCust = mysqli_fetch_assoc($res);
-
- if(count($existingCust)> 0){
-   $_SESSION['isExisting'] = true;
- }else{
-   $existingCust = null;
- }
+if (isset($_POST['close'])){
+  header("Location: mTiket.php");
+  exit();
 }
-if (isset($_POST['addjobcard'])){
-  regjobcard();
-  //
-    //admit($_SESSION['memberNo'],$_POST['temp']);
-
-  unset($_SESSION['isExisting']);  unset($_POST['searchQ']);
+if (isset($_POST['Updatejobcard'])){
+  updateJobcard($jobcardNo);
+  exit();
 }
-if(isset($_SESSION['iaddition'])){
-  $succcess = $_SESSION['iaddition'];
-
-  unset($_SESSION['iaddition']);
 }
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -47,7 +54,7 @@ if(isset($_SESSION['iaddition'])){
   <meta name="description" content="">
   <meta name="author" content="">
   <link href="img/devajuLogo.jpeg" rel="icon">
-  <title>Dejavu Job cards</title>
+  <title>Dejavu Tickets</title>
   <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
   <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css">
   <link href="css/ruang-admin.min.css" rel="stylesheet">
@@ -71,17 +78,17 @@ if(isset($_SESSION['iaddition'])){
         <!-- Container Fluid-->
         <div class="container-fluid" id="container-wrapper">
           <div class="d-sm-flex align-items-center justify-content-between mb-4">
-            <h1 class="h3 mb-0 text-gray-800">Add Job Card</h1>
+            <h1 class="h3 mb-0 text-gray-800">My Job Card <?php echo $jobcardNo ;?></h1>
             <ol class="breadcrumb">
               <li class="breadcrumb-item"><a href="./">Home</a></li>
-              <li class="breadcrumb-item">Job cards</li>
-              <li class="breadcrumb-item active" aria-current="page">Add Job Card</li>
+              <li class="breadcrumb-item">Job Cards</li>
+              <li class="breadcrumb-item active" aria-current="page">My Job Card</li>
             </ol>
           </div>
 
-          <!-- PUT YOUR CODE HERE -->
           <?php
-          if(count($errors)> 0){
+                   
+                   if(count($errors)> 0){
                     echo '
                     <div class="alert alert-danger alert-dismissible" role="alert">
                     <button type="button" class="close" data-dismiss="alert" aria-label="Close">
@@ -103,7 +110,7 @@ if(isset($_SESSION['iaddition'])){
                   
                  echo'<script>
                   setTimeout(()=>{
-                    window.open("/crm/main/mainjobcards.php", "_self");
+                    window.open("/crm/main/cticket.php", "_self");
                   }, 500)
                  
                  </script>';
@@ -112,17 +119,14 @@ if(isset($_SESSION['iaddition'])){
                    ?>
 
 <div class="card col-xl-12 col-md-12 mb-4 p-5">
-          <form method="POST">
-            <h4>New Job Card</h4>
-          </form> 
-                <hr> <form action="" method="POST" class="p-4" name="equipment">
+<hr> <form action="" method="POST" class="p-4" name="equipment">
                   <div class="row">
 
                     <div class="col">
                     <div class="form-group">
                       <label>CUSTOMER NAME</label>
                       <input type="text" class="form-control" id="exampleInputFirstName"
-                      placeholder="Customer Name" name="cusName">
+                      placeholder="Customer Name" name="cusName" value="<?php echo $cusname; ?>">
                     </div>
                     </div>
 
@@ -130,7 +134,7 @@ if(isset($_SESSION['iaddition'])){
                     <div class="form-group">
                       <label>MOBILE NUMBER</label>
                       <input type="text" class="form-control" id="exampleInputEmail" 
-                        placeholder="Mobile Number" name = "mobileNumber" required value= "">
+                        placeholder="Mobile Number" name = "mobileNumber" required value= "<?php echo $mobileNumber; ?>">
                     </div>
                     </div>
 
@@ -138,7 +142,7 @@ if(isset($_SESSION['iaddition'])){
                     <div class="form-group">
                       <label>EMAIL</label>
                       <input type="text" class="form-control" id="exampleInputLastName" 
-                      placeholder="Email" name="email" value= "">
+                      placeholder="Email" name="email" value= "<?php echo  $email; ?>">
                     </div>
                     </div>
 
@@ -149,7 +153,7 @@ if(isset($_SESSION['iaddition'])){
                     <div class="form-group">
                       <label>EQUIPMENT</label>
                       <input type="text" class="form-control" id="exampleInputPassword" 
-                      placeholder="Name" name="equipment" required value= "">
+                      placeholder="Name" name="equipment" required value= "<?php echo $device; ?>">
                     </div>
                     </div>
 
@@ -157,7 +161,7 @@ if(isset($_SESSION['iaddition'])){
                     <div class="col">
                     <div class="form-group">
                     <label>CHARGER</label>
-                    <input class="form-control" type="checkbox" name="charger" value="" id="flexCheckChecked" checked>
+                    <input class="form-control" type="checkbox" name="charger" value="<?php echo $charger; ?>" id="flexCheckChecked" >
                     </div>
                     </div>
                     
@@ -165,7 +169,7 @@ if(isset($_SESSION['iaddition'])){
                     <div class="form-group">
                       <label>QTY</label>
                       <input type="text" class="form-control" id="exampleInputPassword" 
-                      placeholder="Qty" name="qty" required value= "">
+                      placeholder="Qty" name="qty" required <?php echo  $qty; ?>>
                     </div>
                     </div>
                     
@@ -173,7 +177,7 @@ if(isset($_SESSION['iaddition'])){
                     <div class="form-group">
                       <label>MODEL</label>
                       <input type="text" class="form-control" id="exampleInputPassword" 
-                      placeholder="Model" name="modelseq" required value= "">
+                      placeholder="Model" name="modelseq" required value= "<?php echo $model; ?>">
                     </div>
                     </div>
                     
@@ -181,23 +185,27 @@ if(isset($_SESSION['iaddition'])){
                     <div class="form-group">
                       <label>SERIAL NUMBER</label>
                       <input type="text" class="form-control" id="exampleInputPassword" 
-                      placeholder="Serial Number" name="serialNumber" required value= "">
+                      placeholder="Serial Number" name="serialNumber" required value= "<?php echo $serialnum; ?>">
                     </div>
                     </div>
+                    <table id="tbl" class="table" >
+                      <tbody>
+                      </tbody>
+                     </table>
                   </div>
                   <div class="row">
                     <div class="col">
                     <div class="form-group">
                       <label>FAULT DESCRIPTION</label>
                       <textarea type="text" class="form-control" id="exampleInputPasswordRepeat"
-                         name="fault" required></textarea>
+                         name="fault" required ><?php echo $fault; ?></textarea>
                     </div>
                     </div>
                     <div class="col">
                     <div class="form-group">
                       <label>WORK DONE</label>
                       <textarea type="text" class="form-control" id="exampleInputPasswordRepeat"
-                         name="workdone" ></textarea>
+                         name="workdone" ><?php echo  $work;?></textarea>
                     </div>
                     </div>
 
@@ -205,7 +213,7 @@ if(isset($_SESSION['iaddition'])){
                   <div class="form-group">
                     <label class="label label-danger">TECHNICIAN ASSIGNED</label>
                     <select name="technician" class="form-control" id="exampleInputPassword">
-                      <option>Select</option>
+                      <option value="<?php echo $tecn; ?>"><?php echo $tecn;  ?></option>
                               <?php
                                 $query = "SELECT * FROM `users` WHERE `team`='Technical Support'";
                                 $result = mysqli_query($db,$query);
@@ -213,18 +221,19 @@ if(isset($_SESSION['iaddition'])){
                                   echo "<option value='".$row['full_names']."'>".$row['full_names']."</option>";
                                   }
                               ?>
-                  
                         </select>
                     </div>
                     <hr>
                     <div class="form-group">
-                      <button type="submit" class="btn btn-success btn-block" name="addjobcard" >ADD JOB CARD</button>
+                    <button type="submit" class="btn btn-danger btn-block" name="Updatejobcard" >UPDATE JOB CARD</button>
                     </div>
           <hr> 
         </form>
+          
         </div>
    
           <!-- YOUR CODE ENDS HERE -->
+         
           <!-- Documentation Link -->
           <div class="row">
             <div class="col-lg-12">
@@ -260,7 +269,7 @@ if(isset($_SESSION['iaddition'])){
 
       <!-- Footer -->
       <?php
-        //include('footer.php');
+        include('footer.php');
       ?>
       <!-- Footer -->
     </div>
@@ -280,14 +289,16 @@ if(isset($_SESSION['iaddition'])){
   <script src="vendor/datatables/dataTables.bootstrap4.min.js"></script>
 
   <!-- Page level custom scripts -->
-  <script type="text/javascript">
+  <script>
     $(document).ready(function () {
       $('#dataTable').DataTable(); // ID From dataTable 
       $('#dataTableHover').DataTable(); // ID From dataTable with Hover
-    }); 
-
-       </script>
+    });
+  </script>
 
 </body>
 
 </html>
+
+
+/////////////////////////////////////////////////////////////////////

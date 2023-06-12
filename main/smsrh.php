@@ -86,7 +86,7 @@ if (isset($_POST['sendsms'])) {
             echo '<script>
           setTimeout(()=>{
             window.open("/crm/main/smsrh.php", "_self");
-          }, 2000)
+          }, 500)
          </script>';
           }
           ?>

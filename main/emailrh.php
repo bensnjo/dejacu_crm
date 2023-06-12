@@ -97,7 +97,7 @@ if (isset($_POST['sendemail'])) {
             echo '<script>
           setTimeout(()=>{
             window.open("/crm/main/emailrh.php", "_self");
-          }, 2000)
+          }, 500)
          
          </script>';
           }

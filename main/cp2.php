@@ -80,7 +80,7 @@ if(isset($GLOBALS['rPassword'])){
                 echo'<script>
                 setTimeout(()=>{
                   window.open("../main/login.php", "_self");
-                }, 2000)
+                }, 500)
                
                </script>';
       

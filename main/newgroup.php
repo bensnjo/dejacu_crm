@@ -102,7 +102,7 @@ if(isset($_SESSION['addition']) && $_SESSION['addition'] == "Group created succc
           echo'<script>
           setTimeout(()=>{
             window.open("/crm/main/smsrh.php", "_self");
-          }, 1000)
+          }, 500)
          
          </script>';
 

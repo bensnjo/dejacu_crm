@@ -104,6 +104,7 @@
             <a class="collapse-item" href="myjobcards.php">MY JOB CARDS</a>
             <a class="collapse-item" href="openjobcards.php">OPEN JOB CARDS</a>
             <a class="collapse-item" href="closedjobcards.php">CLOSED JOB CARDS</a>
+            <a class="collapse-item" href="dispatchedjc.php">DISPATCHED JOB CARDS</a>
         </div>
         </div>
       </li>

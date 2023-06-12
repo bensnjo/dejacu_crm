@@ -76,7 +76,7 @@ $user = getUser($_SESSION['username']);
                     echo'<script>
                     setTimeout(()=>{
                       window.open("/crm/main/index.php", "_self");
-                    }, 2000)
+                    }, 500)
                    
                    </script>';
                 }
