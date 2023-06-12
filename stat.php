@@ -127,13 +127,13 @@ function perctmyTickets($agent){
         }     
         }
         //percent my job cards increase/decrease
-    function perctmyjobcards(){
+    function perctmyjobcards($agent){
         $db = getConnection();
-        $query= "SELECT COUNT(*) as count FROM  `jobcards` WHERE DATE(`dateCreated`) = (SELECT MAX(DATE(`dateCreated`)) FROM  `jobcards` WHERE DATE(`dateCreated`) < CURDATE())";
+        $query= "SELECT COUNT(*) as count FROM  `jobcards` WHERE `createdBy`='$agent' AND DATE(`dateCreated`) = (SELECT MAX(DATE(`dateCreated`)) FROM  `jobcards` WHERE DATE(`dateCreated`) < CURDATE())";
         $result = mysqli_query($db, $query);
         $no1=intval(mysqli_fetch_assoc($result)['count']);
         //echo $no1;
-        $query2= "SELECT COUNT(*) as count FROM  `jobcards` WHERE DATE(`dateCreated`)= CURDATE()";
+        $query2= "SELECT COUNT(*) as count FROM  `jobcards` WHERE `createdBy`='$agent' AND DATE(`dateCreated`)= CURDATE()";
         $result2 = mysqli_query($db, $query2);
         $no2=intval(mysqli_fetch_assoc($result2)['count']);
         if($no2<=0){
