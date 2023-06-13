@@ -655,7 +655,10 @@ function getopenjobcards()
 function getmyjobcards($agent)
 {
     $db = getConnection();
-    $query = "SELECT * FROM `jobcards` WHERE `techn`='$agent' or `createdBy`='$agent'";
+    $query1 = "SELECT * FROM `users` WHERE `username`='$agent'";
+    $result1 = mysqli_query($db, $query1);
+    $name = mysqli_fetch_assoc($result1)['full_names'];
+    $query = "SELECT * FROM `jobcards` WHERE `techn`='$name' or `createdBy`='$agent'";
     $result = mysqli_query($db, $query);
     return $result;
 }

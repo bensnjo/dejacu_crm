@@ -5,9 +5,9 @@ require_once($_SERVER['DOCUMENT_ROOT']."/crm/access.php");
 session_start();
 
 access();
-
+$agent = $_SESSION['username'];
 $db = getConnection();
-//$members = allTickets();
+
 
 if (isset($_REQUEST['jobcardNo'])){
     
@@ -31,6 +31,10 @@ if (isset($_REQUEST['jobcardNo'])){
     $tecn =  $result2['techn'];
     $createdby= $result2['createdBy'];
     $stats= $result2['status'];
+    //get the name of the receiver
+$query1 = "SELECT * FROM `users` WHERE `username`='$createdby'";
+$result1 = mysqli_query($db, $query1);
+$nameagent = mysqli_fetch_assoc($result1)['full_names'];
 // 
 }
 if (isset($_POST['close'])){
@@ -121,8 +125,7 @@ if (isset($_POST['close'])){
                     <div class="col">
                     <div class="form-group">
                       <label>CUSTOMER NAME</label>
-                      <input type="text" class="form-control" id="exampleInputFirstName"
-                      placeholder="Customer Name" name="cusName" value="<?php echo $cusname; ?>">
+                      <input type="text" class="form-control" id="exampleInputFirstName" style="color: #cc0000;"  placeholder="Customer Name" name="cusName" value="<?php echo $cusname; ?>">
                     </div>
                     </div>
 
@@ -130,7 +133,7 @@ if (isset($_POST['close'])){
                     <div class="form-group">
                       <label>MOBILE NUMBER</label>
                       <input type="text" class="form-control" id="exampleInputEmail" 
-                        placeholder="Mobile Number" name = "mobileNumber" required value= "<?php echo $mobileNumber; ?>">
+                        placeholder="Mobile Number" name = "mobileNumber" required value= "<?php echo $mobileNumber; ?>" style="color: #cc0000;">
                     </div>
                     </div>
 
@@ -138,7 +141,7 @@ if (isset($_POST['close'])){
                     <div class="form-group">
                       <label>EMAIL</label>
                       <input type="text" class="form-control" id="exampleInputLastName" 
-                      placeholder="Email" name="email" value= "<?php echo  $email; ?>">
+                      placeholder="Email" name="email" value= "<?php echo  $email; ?>" style="color: #cc0000;">
                     </div>
                     </div>
 
@@ -149,7 +152,7 @@ if (isset($_POST['close'])){
                     <div class="form-group">
                       <label>EQUIPMENT</label>
                       <input type="text" class="form-control" id="exampleInputPassword" 
-                      placeholder="Name" name="equipment" required value= "<?php echo $device; ?>">
+                      placeholder="Name" name="equipment" required value= "<?php echo $device; ?>" style="color: #cc0000;">
                     </div>
                     </div>
 
@@ -157,15 +160,15 @@ if (isset($_POST['close'])){
                     <div class="col">
                     <div class="form-group">
                     <label>CHARGER</label>
-                    <input class="form-control" type="checkbox" name="charger" value="<?php echo $charger; ?>" id="flexCheckChecked" >
+                    <input class="form-control" type="checkbox" name="charger" value="<?php echo $charger; ?>" id="flexCheckChecked" style="color: #cc0000;" >
                     </div>
                     </div>
                     
                     <div class="col">
                     <div class="form-group">
                       <label>QTY</label>
-                      <input type="text" class="form-control" id="exampleInputPassword" 
-                      placeholder="Qty" name="qty" required <?php echo  $qty; ?>>
+                      <input type="text" class="form-control" id="exampleInputPassword" style="color: #cc0000;" 
+                      placeholder="Qty" name="qty" value="<?php echo  $qty; ?>" required>
                     </div>
                     </div>
                     
@@ -173,7 +176,7 @@ if (isset($_POST['close'])){
                     <div class="form-group">
                       <label>MODEL</label>
                       <input type="text" class="form-control" id="exampleInputPassword" 
-                      placeholder="Model" name="modelseq" required value= "<?php echo $model; ?>">
+                      placeholder="Model" name="modelseq" required value= "<?php echo $model; ?>" style="color: #cc0000;">
                     </div>
                     </div>
                     
@@ -181,7 +184,7 @@ if (isset($_POST['close'])){
                     <div class="form-group">
                       <label>SERIAL NUMBER</label>
                       <input type="text" class="form-control" id="exampleInputPassword" 
-                      placeholder="Serial Number" name="serialNumber" required value= "<?php echo $serialnum; ?>">
+                      placeholder="Serial Number" name="serialNumber" required value= "<?php echo $serialnum; ?>" style="color: #cc0000;">
                     </div>
                     </div>
                     <table id="tbl" class="table" >
@@ -194,21 +197,22 @@ if (isset($_POST['close'])){
                     <div class="form-group">
                       <label>FAULT DESCRIPTION</label>
                       <textarea type="text" class="form-control" id="exampleInputPasswordRepeat"
-                         name="fault" required ><?php echo $fault; ?></textarea>
+                         name="fault" required style="color: #cc0000;"><?php echo $fault; ?></textarea>
                     </div>
                     </div>
                     <div class="col">
                     <div class="form-group">
                       <label>WORK DONE</label>
                       <textarea type="text" class="form-control" id="exampleInputPasswordRepeat"
-                         name="workdone" required><?php echo  $work;?></textarea>
+                         name="workdone" required style="color: #cc0000;"><?php echo  $work;?></textarea>
                     </div>
                     </div>
 
                   </div>
-                  <div class="form-group">
+                  <div class="row">
+                  <div class="form-group col">
                     <label class="label label-danger">TECHNICIAN ASSIGNED</label>
-                    <select name="technician" class="form-control" id="exampleInputPassword">
+                    <select name="technician" class="form-control" id="exampleInputPassword" style="color: #cc0000;">
                       <option value="<?php echo $tecn; ?>"><?php echo $tecn;  ?></option>
                               <?php
                                 $query = "SELECT * FROM `users` WHERE `team`='Technical Support'";
@@ -219,11 +223,13 @@ if (isset($_POST['close'])){
                               ?>
                         </select>
                     </div>
-                    <hr>
-                    <div class="form-group">
-                      <button ></button>
-                    </div>
-          <hr> 
+                    <div class="form-group col">
+                    <label class="label label-danger">RECEIVED BY</label>
+                    <select name="technician" class="form-control" id="exampleInputPassword" style="color: #cc0000;">
+                      <option value="<?php echo $nameagent; ?>" selected><?php echo $nameagent;  ?></option>
+                      </select>
+                  </div>
+                  </div>
         </form>
           
         </div>
