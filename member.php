@@ -632,7 +632,7 @@ function getclosedjobcards()
 {
     
     $db = getConnection();
-    $query = "SELECT * FROM `jobcards` WHERE `status`=0";
+    $query = "SELECT * FROM `jobcards` WHERE `status`=0 AND `issued`=0";
     $result = mysqli_query($db, $query);
     return $result;
 }
@@ -640,7 +640,7 @@ function getissuedjobcards()
 {
     
     $db = getConnection();
-    $query = "SELECT * FROM `jobcards` WHERE `issued`=1 order by id asc";
+    $query = "SELECT * FROM `jobcards` WHERE `status`=0 AND `issued`=1 order by id asc";
     $result = mysqli_query($db, $query);
     return $result;
 }
