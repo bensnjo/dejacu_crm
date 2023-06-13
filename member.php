@@ -377,7 +377,7 @@ function getAgentjobcards($agent)
 function getAlljobcards()
 {
     $db = getConnection();
-    $queryjobcards = "SELECT * FROM `jobcards` ORDER BY id asc";
+    $queryjobcards = "SELECT * FROM `jobcards` ORDER BY id desc";
     $result = mysqli_query($db, $queryjobcards);
     if (mysqli_error($db)) {
         echo mysqli_error($db);
@@ -415,7 +415,7 @@ function getAgentTikets2($agent, $resolved = false)
 function allcustomers()
 {
     $db = getConnection();
-    $query = "SELECT * FROM customers ";
+    $query = "SELECT * FROM customers ORDER BY id DESC ";
     $result = mysqli_query($db, $query);
     return $result;
 }
@@ -443,13 +443,13 @@ $db = getConnection();
 }
 function allleads(){
     $db = getConnection();
-    $query = "SELECT * FROM djvuleads";
+    $query = "SELECT * FROM djvuleads ORDER BY id DESC";
     $result = mysqli_query($db, $query);
     return $result;
 }
 function agentleads($agent){
     $db = getConnection();
-    $query = "SELECT * FROM `djvuleads` WHERE `created by`='$agent'";
+    $query = "SELECT * FROM `djvuleads` WHERE `created by`='$agent' ORDER BY id DESC";
     $result = mysqli_query($db, $query);
     return $result;  
 }
@@ -538,14 +538,14 @@ function addgroup()
 function allTickets()
 {
     $db = getConnection();
-    $query = "SELECT * FROM `insidence`";
+    $query = "SELECT * FROM `insidence` ORDER BY id DESC";
     $result = mysqli_query($db, $query);
     return $result;
 }
 function openTickets()
 {   $status="OPEN";
     $db = getConnection();
-    $query = "SELECT * FROM `insidence` WHERE `status`='$status'";
+    $query = "SELECT * FROM `insidence` WHERE `status`='$status' ORDER BY id DESC";
     $result = mysqli_query($db, $query);
     return $result;
 }
@@ -622,7 +622,7 @@ function getgroupname($id)
 function allResolvedTickets()
 {
     $db = getConnection();
-    $query = "SELECT * FROM `insidence` WHERE `resolvedAt` IS NOT NULL AND `resolvedby` IS NOT NULL";
+    $query = "SELECT * FROM `insidence` WHERE `resolvedAt` IS NOT NULL AND `resolvedby` IS NOT NULL ORDER BY id DESC";
     $result = mysqli_query($db, $query);
     return $result;
 }
@@ -632,7 +632,7 @@ function getclosedjobcards()
 {
     
     $db = getConnection();
-    $query = "SELECT * FROM `jobcards` WHERE `status`=0 AND `issued`=0";
+    $query = "SELECT * FROM `jobcards` WHERE `status`=0 AND `issued`=0 ORDER BY id DESC";
     $result = mysqli_query($db, $query);
     return $result;
 }
@@ -640,7 +640,7 @@ function getissuedjobcards()
 {
     
     $db = getConnection();
-    $query = "SELECT * FROM `jobcards` WHERE `status`=0 AND `issued`=1 order by id asc";
+    $query = "SELECT * FROM `jobcards` WHERE `status`=0 AND `issued`=1 order by id desc";
     $result = mysqli_query($db, $query);
     return $result;
 }
@@ -648,7 +648,7 @@ function getopenjobcards()
 {
     
     $db = getConnection();
-    $query = "SELECT * FROM `jobcards` WHERE `status`=1";
+    $query = "SELECT * FROM `jobcards` WHERE `status`=1 ORDER BY id DESC";
     $result = mysqli_query($db, $query);
     return $result;
 }
@@ -658,7 +658,7 @@ function getmyjobcards($agent)
     $query1 = "SELECT * FROM `users` WHERE `username`='$agent'";
     $result1 = mysqli_query($db, $query1);
     $name = mysqli_fetch_assoc($result1)['full_names'];
-    $query = "SELECT * FROM `jobcards` WHERE `techn`='$name' or `createdBy`='$agent'";
+    $query = "SELECT * FROM `jobcards` WHERE `techn`='$name' or `createdBy`='$agent' ORDER BY id DESC";
     $result = mysqli_query($db, $query);
     return $result;
 }
