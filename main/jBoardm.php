@@ -161,7 +161,7 @@ if (isset($_POST['Updatejobcard'])){
                     <div class="col">
                     <div class="form-group">
                     <label>CHARGER</label>
-                    <input class="form-control" type="checkbox" name="charger" value="<?php echo $charger; ?>" id="flexCheckChecked" >
+                    <input class="form-control" type="checkbox" name="charger" checked="<?php if($charger!=null) echo "checked";?>" >
                     </div>
                     </div>
                     
@@ -169,7 +169,7 @@ if (isset($_POST['Updatejobcard'])){
                     <div class="form-group">
                       <label>QTY</label>
                       <input type="text" class="form-control" id="exampleInputPassword" 
-                      placeholder="Qty" name="qty" required <?php echo  $qty; ?>>
+                      placeholder="Qty" name="qty" required value="<?php echo  $qty; ?>">
                     </div>
                     </div>
                     

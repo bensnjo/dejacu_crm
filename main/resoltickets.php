@@ -109,7 +109,7 @@ $tickets = allResolvedTickets();
                                     print "<td>" . $AssignedTo. "</td>";
                                     print "<td>" . $resolvedBy. "</td>";
                                     print("<td>");
-                                    print('<a " href="/crm/admin/closedTicketView.php?id='.$row['id'].'"><i class="fa fa-eye"></i></a>');
+                                    print('<a " href="/crm/main/viewticket.php?id='.$row['id'].'"><i class="fa fa-eye"></i></a>');
                                     print("</td>");
                                       }}
 
