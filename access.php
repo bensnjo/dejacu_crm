@@ -76,10 +76,6 @@ function login($username1, $password1){
                   </div>
                     ';
                 }else {
-
-                
-                
-
                 $_SESSION['ip']= $ip;
                 $query1 = "INSERT INTO audit_trail (username, time_stamp, `action`, results, impact, ip_address)
                            VALUES('$username','$d', 'login', 'succes', '$username', '$ip')";
@@ -87,14 +83,9 @@ function login($username1, $password1){
 
                 if ($_SESSION['usertype']=='admin'){
                     header('location: /crm/admin/index.php');
-                
-
                 }else{
-                header('location: index.php');
+                header('location: /crm/main/index.php');
                 }}
-            
-            
-
             }else {
                 $t = time();
                 $d = date("Y-m-d G:i:s",$t);
