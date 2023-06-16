@@ -255,8 +255,6 @@ function updateJobcard($jobcardNo){
     $db = getConnection();
     $d = date("Y-m-d G:i");
     $ip = getip();
-    //$cusName = mysqli_real_escape_string($db, $_POST['cusName']);
-   //$mobileNumber = mysqli_real_escape_string($db, $_POST['mobileNumber']);
     $email = mysqli_real_escape_string($db, $_POST['email']);
     $equipment = mysqli_real_escape_string($db, $_POST['equipment']);
     $charger = mysqli_real_escape_string($db, $_POST['charger']);
@@ -264,13 +262,11 @@ function updateJobcard($jobcardNo){
     $modelseq = mysqli_real_escape_string($db, $_POST['modelseq']);
     $serialNumber = mysqli_real_escape_string($db, $_POST['serialNumber']);
     $fault = mysqli_real_escape_string($db, $_POST['fault']);
-    //$technician = mysqli_real_escape_string($db, $_POST['technician']);
     $user = $_SESSION['username'];
     $query = "UPDATE `jobcards` SET `serialNumber`='$serialNumber',`email`='$email',`devicename`=' $equipment]',`charger`='$charger',
     `qty`='$qty',`model`='$modelseq',`fault`='$fault',`work`='[value-13]' WHERE `jbcrdNum`='$jobcardNo'";
     $result = mysqli_query($db, $query);
-    //sendSMSnew($cusnum, $msgtech);
-    $_SESSION['iaddition'] = "Jobcard".$jobcardNo." closed succcessfully";
+    $_SESSION['iaddition'] = "Jobcard".$jobcardNo." updated succcessfully";
     $audit = "INSERT INTO audit_trail (username, time_stamp, `action`, results, impact, ip_address)
     VALUES('$user','$d', 'update_jbc', 'success', '$jobcardNo', '$ip')";
     mysqli_query($db, $audit);

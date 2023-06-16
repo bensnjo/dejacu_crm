@@ -157,7 +157,7 @@ if(isset($_SESSION['iaddition'])){
                     <div class="col">
                     <div class="form-group">
                     <label>CHARGER</label>
-                    <input class="form-control" type="checkbox" name="charger" value="" id="flexCheckChecked" checked>
+                    <input class="form-control" type="checkbox" name="charger" value="charger" id="flexCheckChecked" checked>
                     </div>
                     </div>
                     

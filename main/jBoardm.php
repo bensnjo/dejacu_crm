@@ -37,9 +37,17 @@ if (isset($_POST['close'])){
   header("Location: mTiket.php");
   exit();
 }
-if (isset($_POST['Updatejobcard'])){
+if (isset($_POST['Updatejobcard'])) {
   updateJobcard($jobcardNo);
-  exit();
+  $succcess = "Job card updated succcessfully";
+  if (isset($_SESSION['addition']) && $_SESSION['addition'] == "Job card updated succcessfully ") {
+    $succcess = "Job card updated succcessfully";
+    unset($_SESSION['addition']);
+  }
+}
+if (isset($_SESSION['addition']) && $_SESSION['addition'] == "Lead updated Successfully ") {
+$succcess = "Lead update successfully";
+unset($_SESSION['addition']);
 }
 }
 ?>
@@ -110,7 +118,7 @@ if (isset($_POST['Updatejobcard'])){
                   
                  echo'<script>
                   setTimeout(()=>{
-                    window.open("/crm/main/cticket.php", "_self");
+                    window.open("/crm/main/myjobcards.php", "_self");
                   }, 500)
                  
                  </script>';
@@ -161,7 +169,8 @@ if (isset($_POST['Updatejobcard'])){
                     <div class="col">
                     <div class="form-group">
                     <label>CHARGER</label>
-                    <input class="form-control" type="checkbox" name="charger" checked="<?php if($charger!=null) echo "checked";?>" >
+                    <input type='hidden' value='0' name='charger'>
+                    <input class="form-control" type="checkbox" name="charger" value="<?php echo $charger; ?>" checked="<?php if($charger!=null) echo "checked";?>" >
                     </div>
                     </div>
                     
