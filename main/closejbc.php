@@ -225,8 +225,7 @@ if(isset($_SESSION['iaddition'])){
                     <div class="form-group">
                       <label style="color: red;">CLOSE JOBCARD</label>
                       <select name="closeJobcard" class="form-control" id="exampleInputPassword" required>
-                      <option>Select</option>
-                      <option style="color: red;" value="CLOSE">CLOSE</option>
+                      <option style="color: red;" value="CLOSE" selected>CLOSE</option>
                         </select>
                     </div>
                     </div>
