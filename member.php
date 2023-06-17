@@ -260,11 +260,12 @@ function updateJobcard($jobcardNo){
     $charger = mysqli_real_escape_string($db, $_POST['charger']);
     $qty = mysqli_real_escape_string($db, $_POST['qty']);
     $modelseq = mysqli_real_escape_string($db, $_POST['modelseq']);
+    $workdone= mysqli_real_escape_string($db, $_POST['workdone']);
     $serialNumber = mysqli_real_escape_string($db, $_POST['serialNumber']);
     $fault = mysqli_real_escape_string($db, $_POST['fault']);
     $user = $_SESSION['username'];
     $query = "UPDATE `jobcards` SET `serialNumber`='$serialNumber',`email`='$email',`devicename`=' $equipment]',`charger`='$charger',
-    `qty`='$qty',`model`='$modelseq',`fault`='$fault',`work`='[value-13]' WHERE `jbcrdNum`='$jobcardNo'";
+    `qty`='$qty',`model`='$modelseq',`fault`='$fault',`work`='$workdone' WHERE `jbcrdNum`='$jobcardNo'";
     $result = mysqli_query($db, $query);
     $_SESSION['iaddition'] = "Jobcard".$jobcardNo." updated succcessfully";
     $audit = "INSERT INTO audit_trail (username, time_stamp, `action`, results, impact, ip_address)

@@ -42,7 +42,8 @@ if (isset($_POST['change'])){
               <div class="col-lg-12">
                 <div class="login-form">
                   <div class="text-center">
-                   <!-- <img src="img/logo.png" > -->
+                  <img style="width: 200px; height: 120px" src="img/devajuLogo.jpeg">
+                    <!-- <img src="img/logo.png" > -->
                    <hr>
 
                    <?php
@@ -58,25 +59,31 @@ if (isset($_POST['change'])){
                     ';
                 }
                    ?>
-                    <h1 class="h4 text-gray-900 mb-4">CHANGE PASSWORD</h1>
+                    <h1 class="h4 text-gray-900 mb-4" style="color: red;">CHANGE PASSWORD</h1>
                     
                   </div>
                   <form class="user" action="" method="POST" onsubmit="return checkPasswords()">
                   <div class="form-group">
-                      <input type="password" class="form-control" id="exampleInputPassword" 
+                      <input type="password" class="form-control" id="id_password"
                       placeholder="Old Password" name="password2" required>
+                      <i class="far fa-eye" id="togglePassword" style="cursor: pointer"></i> 
+                      <label class="">See password</label>
                     </div>
                     <div class="form-group">
                       <input type="password" class="form-control" id="pInput1" placeholder="New Password"
                        name="password" required>
+                       <i class="far fa-eye" id="togglePassword1" style="cursor: pointer"></i> 
+                      <label style="font-style: italic; font-size: 12px; color: red;">See password</label>
                     </div>
                     <div class="form-group">
                       <input type="password" class="form-control" id="pInput2" 
                       placeholder="Repeat Password" name="password1" required>
+                      <i class="far fa-eye" id="togglePassword2" style="cursor: pointer"></i> 
+                      <label style="font-style: italic; font-size: 12px; color: red;">See password</label>
                     </div>
                     
                     <div class="form-group">
-                      <input type="submit" value="SUBMIT" class="btn btn-primary btn-block" name="change">
+                      <input type="submit" value="SUBMIT" class="btn btn-danger btn-block" name="change">
                     </div>
                     <hr>
                     
@@ -98,7 +105,40 @@ if (isset($_POST['change'])){
   <script src="vendor/jquery-easing/jquery.easing.min.js"></script>
   <script src="js/ruang-admin.min.js"></script>
 </body>
+<script>
+    const togglePassword = document.querySelector('#togglePassword');
+    const password = document.querySelector('#id_password');
 
+    togglePassword.addEventListener('click', function(e) {
+      // toggle the type attribute
+      const type = password.getAttribute('type') === 'password' ? 'text' : 'password';
+      password.setAttribute('type', type);
+      // toggle the eye slash icon
+      this.classList.toggle('fa-eye-slash');
+    });
+
+    const togglePassword1 = document.querySelector('#togglePassword1');
+    const password1 = document.querySelector('#pInput1');
+
+    togglePassword1.addEventListener('click', function(e) {
+      // toggle the type attribute
+      const type = password1.getAttribute('type') === 'password' ? 'text' : 'password';
+      password1.setAttribute('type', type);
+      // toggle the eye slash icon
+      this.classList.toggle('fa-eye-slash');
+    });
+
+    const togglePassword2 = document.querySelector('#togglePassword2');
+    const password2 = document.querySelector('#pInput2');
+
+    togglePassword2.addEventListener('click', function(e) {
+      // toggle the type attribute
+      const type = password2.getAttribute('type') === 'password' ? 'text' : 'password';
+      password2.setAttribute('type', type);
+      // toggle the eye slash icon
+      this.classList.toggle('fa-eye-slash');
+    });
+  </script>
 <script>
 
  function checkPasswords(){

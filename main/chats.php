@@ -152,7 +152,7 @@ if(isset($_POST['send'])){
                         
                         
                         $massage =@tickethead(); 
-
+                        $date =date("Y-m-d G:i");
                         if($massage != null or strlen($massage)>1){
                           $_SESSION['conter'] = 8;
                         }

@@ -1,39 +1,38 @@
-<?php 
-require_once($_SERVER['DOCUMENT_ROOT']."/crm/connection.php");
-require_once($_SERVER['DOCUMENT_ROOT']."/crm/access.php");
+<?php
+require_once($_SERVER['DOCUMENT_ROOT'] . "/crm/connection.php");
+require_once($_SERVER['DOCUMENT_ROOT'] . "/crm/access.php");
 session_start();
-$username= $_SESSION['username'] ;
+$username = $_SESSION['username'];
 access();
 
-if(isset($_REQUEST['id'])){
-$db =  getConnection();  
- $id = $_REQUEST['id'];  
+if (isset($_REQUEST['id'])) {
+  $db =  getConnection();
+  $id = $_REQUEST['id'];
 
-$query1 = "SELECT * FROM `insidence` WHERE `id`= $id";
-$subject = mysqli_query($db,$query1);
-$subject = mysqli_fetch_assoc($subject);
+  $query1 = "SELECT * FROM `insidence` WHERE `id`= $id";
+  $subject = mysqli_query($db, $query1);
+  $subject = mysqli_fetch_assoc($subject);
 
-$TicketNumber = $subject['ticketNumber'];
-//echo $name;
+  $TicketNumber = $subject['ticketNumber'];
+  //echo $name;
 
-if(isset($_POST['resolve'])){
-$d = date("Y-m-d G:i:s");
-$status="CLOSED";
-$query2 = "UPDATE `insidence` SET `resolvedAt`='$d',`resolvedby`='$username',`status`='$status' WHERE `id`= '$id'";
-mysqli_query($db,$query2);
+  if (isset($_POST['resolve'])) {
+    $d = date("Y-m-d G:i:s");
+    $status = "CLOSED";
+    $query2 = "UPDATE `insidence` SET `resolvedAt`='$d',`resolvedby`='$username',`status`='$status' WHERE `id`= '$id'";
+    mysqli_query($db, $query2);
 
- // audit trail
+    // audit trail
 
- $ip = getip();
- $t = time();
-$d = date("Y-m-d G:i:s",$t);
+    $ip = getip();
+    $t = time();
+    $d = date("Y-m-d G:i:s", $t);
 
- $audit = "INSERT INTO audit_trail (username, time_stamp, `action`, results, impact, ip_address)
+    $audit = "INSERT INTO audit_trail (username, time_stamp, `action`, results, impact, ip_address)
  VALUES('$username','$d', 'edit_Device', 'success', '$TicketNumber', '$ip')";
- mysqli_query($db, $audit);
- $succcess = "Ticket resolved succcessfully";
-
-}
+    mysqli_query($db, $audit);
+    $succcess = "Ticket resolved succcessfully";
+  }
 }
 ?>
 
@@ -53,12 +52,14 @@ $d = date("Y-m-d G:i:s",$t);
   <link href="css/ruang-admin.min.css" rel="stylesheet">
   <link href="vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet">
   <style>
-    .dev {justify-content: center;
+    .dev {
+      justify-content: center;
       align-items: center;
       width: 100%;
       min-height: 100%;
       background: url("/uploads/media/default/0001/01/49bff73f282c2c21f3341f1fe457fe35337b1792.jpeg") no-repeat center;
-      background-size: cover;}
+      background-size: cover;
+    }
   </style>
 </head>
 
@@ -66,20 +67,20 @@ $d = date("Y-m-d G:i:s",$t);
   <div id="wrapper">
     <!-- Sidebar -->
     <?php
-      include('sidebar.php');
+    include('sidebar.php');
     ?>
     <!-- Sidebar -->
     <div id="content-wrapper" class="d-flex flex-column">
       <div id="content">
         <!-- TopBar -->
         <?php
-         include('topbar.php');
+        include('topbar.php');
         ?>
         <!-- Topbar -->
         <!-- Container Fluid-->
         <div class="container-fluid" id="container-wrapper">
           <div class="d-sm-flex align-items-center justify-content-between mb-4">
-            <h1 class="h3 mb-0 text-gray-800">Resolve Ticket No. <?php echo " ".$TicketNumber;?></h1>
+            <h1 class="h3 mb-0 text-gray-800">Resolve Ticket No. <?php echo " " . $TicketNumber; ?></h1>
             <ol class="breadcrumb">
               <li class="breadcrumb-item"><a href="./">Home</a></li>
               <li class="breadcrumb-item">Tickets</li>
@@ -89,76 +90,67 @@ $d = date("Y-m-d G:i:s",$t);
 
 
           <?php
-                   
-                   if(isset($error)){
-                    echo '
+
+          if (isset($error)) {
+            echo '
                     <div class="alert alert-danger alert-dismissible" role="alert">
                     <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                       <span aria-hidden="true">&times;</span>
                     </button>
-                    '.$error.'
+                    ' . $error . '
                   </div>
                     ';
-                }
+          }
 
 
-           if(isset($succcess)){
+          if (isset($succcess)) {
             echo  '<div class="alert alert-success alert-dismissible fade show ml-4 mr-4" des$designation="alert">
-            '.$succcess.'
+            ' . $succcess . '
             <button type="button" class="close" data-dismiss="alert" aria-label="Close">
               <span aria-hidden="true">&times;</span>
             </button>
           </div>';
 
 
-          echo'<script>
+            echo '<script>
           setTimeout(()=>{
             window.open("/crm/main/cticket.php", "_self");
           }, 500)
          
          </script>';
+          }
 
-           }
 
-
-                   ?>
+          ?>
 
           <!-- PUT YOUR CODE HERE -->
-          <div class= "dev" style = "background-color: #4dd0e1CC; padding: 10px; border-radius: 10px; min-height: 200px; margin: 20px; display: flex; justify-content: center;">
-          <div class= "card col-lg-8" >
-          <form action="" method="POST">
-          <div class="form-group">
-                      
-                    
-                    <div class="form-group">
-                      <label></label>
-                      <select name="status" class="form-control" id="exampleInputPassword">
-                        <option value="RESOLVED">RESOLVE</option>
-                      </select>
-                    </div>
-                    <div class="form-group">
-                      <button type="submit" class="btn btn-danger btn-block" name="resolve" >RESOLVE TICKET</button>
-                    </div>
-
-                    <hr>
-                  </form>      
-</div>
-</div>
-          <!-- YOUR CODE ENDS HERE -->
-         
-          </div>
-          <!--Row-->
-
-          <!-- Documentation Link -->
-          <div class="row">
-            <div class="col-lg-12">
-              
+          <div class="col-lg-12">
+            <div class="card mb-4">
+              <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                <h6 class="m-0 font-weight-bold text-primary">OPEN TICKETS</h6>
+              </div>
+              <form action="" method="POST">
+                <div class="col-10">
+                  <div class="form-group">
+                    <label></label>
+                    <select name="status" class="form-control" id="exampleInputPassword" hidden>
+                      <option value="RESOLVED">RESOLVE</option>
+                    </select>
+                  </div>
+                  <div class="form-group">
+                    <button type="submit" class="btn btn-danger btn-block" name="resolve">RESOLVE TICKET</button>
+                  </div>
+                </div>
+                <hr>
+              </form>
             </div>
           </div>
+          <!-- Button trigger modal -->
+
+
 
           <!-- Modal Logout -->
-          <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabelLogout"
-            aria-hidden="true">
+          <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabelLogout" aria-hidden="true">
             <div class="modal-dialog" role="document">
               <div class="modal-content">
                 <div class="modal-header">
@@ -184,7 +176,7 @@ $d = date("Y-m-d G:i:s",$t);
 
       <!-- Footer -->
       <?php
-        //include('footer.php');
+      //include('footer.php');
       ?>
       <!-- Footer -->
     </div>
@@ -205,7 +197,7 @@ $d = date("Y-m-d G:i:s",$t);
 
   <!-- Page level custom scripts -->
   <script>
-    $(document).ready(function () {
+    $(document).ready(function() {
       $('#dataTable').DataTable(); // ID From dataTable 
       $('#dataTableHover').DataTable(); // ID From dataTable with Hover
     });

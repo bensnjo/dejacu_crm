@@ -88,24 +88,28 @@ if(isset($GLOBALS['rPassword'])){
 
 
                    ?>
-                    <h1 class="h4 text-gray-900 mb-4">CHANGE PASSWORD</h1>
+                    <h1 class="h4 text-gray-900 mb-4" style="color: red;">CHANGE PASSWORD</h1>
 
-                    <p>Enter the OTP Sent to your Phone Number</p>
+                    <p style="font-style: italic; font-size: 16px; color: red;">Enter the OTP sent to your phone number</p>
                     
                   </div>
                   <form class="user" action="" method="POST" onsubmit="return checkPasswords()">
                   <div class="form-group">
-                      <input type="text" class="form-control" id="exampleInputPassword" placeholder="Enter OTP" name="otp" required>
+                      <input type="text" class="form-control" id="exampleInputPassword" placeholder="Enter OTP" name="otp" autocomplete="new-password" required>
                     </div>
                     <div class="form-group">
-                      <input type="password" class="form-control" id="pInput1" placeholder="New Password" name="password" required>
+                      <input type="password" class="form-control" id="pInput1" placeholder="New Password" autocomplete="new-password" name="password" required>
+                      <i class="far fa-eye" id="togglePassword1" style="cursor: pointer"></i> 
+                      <label style="font-style: italic; font-size: 12px; color: red;">See new password</label>
                     </div>
                     <div class="form-group">
-                      <input type="password" class="form-control" id="pInput2" placeholder="Repeat Password" name="password1" required>
+                      <input type="password" class="form-control" id="pInput2" placeholder="Repeat Password" autocomplete="new-password" name="password1" required>
+                      <i class="far fa-eye" id="togglePassword2" style="cursor: pointer"></i> 
+                      <label style="font-style: italic; font-size: 12px; color: red;">See repeat password</label>
                     </div>
                     
                     <div class="form-group">
-                      <input type="submit" value ="SUBMIT PASSWORD" class="btn btn-primary btn-block" name="change">
+                      <input type="submit" value ="SUBMIT PASSWORD" class="btn btn-danger btn-block" name="change">
                     </div>
                     <hr>
                     
@@ -130,9 +134,28 @@ if(isset($GLOBALS['rPassword'])){
   <script src="vendor/jquery-easing/jquery.easing.min.js"></script>
   <script src="js/ruang-admin.min.js"></script>
 </body>
-
 <script>
+    const togglePassword = document.querySelector('#togglePassword2');
+    const password = document.querySelector('#pInput2');
 
+    togglePassword.addEventListener('click', function(e) {
+      // toggle the type attribute
+      const type = password.getAttribute('type') === 'password' ? 'text' : 'password';
+      password.setAttribute('type', type);
+      // toggle the eye slash icon
+      this.classList.toggle('fa-eye-slash');
+    });
+
+    const togglePassword1 = document.querySelector('#togglePassword1');
+    const password1 = document.querySelector('#pInput1');
+
+    togglePassword1.addEventListener('click', function(e) {
+      // toggle the type attribute
+      const type = password1.getAttribute('type') === 'password' ? 'text' : 'password';
+      password1.setAttribute('type', type);
+      // toggle the eye slash icon
+      this.classList.toggle('fa-eye-slash');
+    });
  function checkPasswords(){
 
     if(document.getElementById("pInput1").value != document.getElementById("pInput2").value){

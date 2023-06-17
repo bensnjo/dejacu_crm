@@ -119,18 +119,16 @@ $tickets = getAgentTikets($agent);
                 </div>
               </div>
             </div>
-            <!-- DataTable with Hover -->
+            <!--data-toggle="modal" data-target="#exampleModal-->
           <!-- YOUR CODE ENDS HERE -->
          
           </div>
           <!--Row-->
 
           <!-- Documentation Link -->
-          <div class="row">
-            <div class="col-lg-12">
-              
-            </div>
-          </div>
+          <!-- Modal -->
+
+
 
           <!-- Modal Logout -->
           <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabelLogout"
