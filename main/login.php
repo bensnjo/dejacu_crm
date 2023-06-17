@@ -1,6 +1,6 @@
 <?php
-require_once($_SERVER['DOCUMENT_ROOT'] . "/crm/connection.php");
-require_once($_SERVER['DOCUMENT_ROOT'] . "/crm/access.php");
+require_once($_SERVER['DOCUMENT_ROOT'] . "/connection.php");
+require_once($_SERVER['DOCUMENT_ROOT'] . "/access.php");
 
 if (isset($_POST['login'])) {
   login($_POST['username'], $_POST['password']);
