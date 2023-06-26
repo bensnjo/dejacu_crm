@@ -198,7 +198,7 @@ function register(){
             $type="new_user";
             $loggedin = getUser($_SESSION['username']);
             $subject="Your Registration as a user, CRM";
-            $message="Dear ".$full_names.", Welcome to Dejavu Technologies LTD!\r\n\nYou have been registered as a user on Dejavu CRM (https://dejavutechkenya.com/crm/main/login.php).\r\n\n
+            $message="Dear ".$full_names.", Welcome to Dejavu Technologies LTD!\r\n\nYou have been registered as a user on Dejavu CRM (https://crm.dejavutechkenya.com/crm/main/login.php).\r\n\n
             Your username is <b>".$username."</b>\r\n\nYour password is <b>" .$password_1."</b>. After logging in with the provided details, you will be prompted to change your password.\r\n\n
             Let's do great things together!\r\n\n
             Thank you ".$username;
